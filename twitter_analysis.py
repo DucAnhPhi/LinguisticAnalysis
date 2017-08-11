@@ -11,6 +11,7 @@ import urllib.request
 from nltk.corpus import stopwords
 from nltk.corpus import twitter_samples
 from nltk.corpus import wordnet
+from nltk.corpus import cmudict
 from nltk.tokenize import TweetTokenizer
 from nltk.tokenize import sent_tokenize
 from assets.contractions import contractions
@@ -179,6 +180,25 @@ def get_word_difficulty(word):
     if difficulty:
         return difficulty[0]
 
+def get_word_syllables(word):
+    pronouncingDict = cmudict.dict()
+    # returns a list of transcriptions for a word - a word may have alternative pronunciations
+    # eg. 'orange' -> [['AO1', 'R', 'AH0', 'N', 'JH'], ['A01', 'R', 'IH0', 'N', 'JH']]
+    # vowels are marked with numbers from 0-2
+    # by counting the vowels we can get the number of syllables
+    try:
+        # last element is more common
+        pronList = pronouncingDict[word.lower()][-1]
+        return len([ syl for syl in pronList if syl[-1].isdecimal() ])
+    except KeyError:
+        # scrape syllable count
+        url = 'http://www.syllablecount.com/syllables/' + word
+        request = urllib.request.urlopen(url)
+        response = request.read().decode('utf-8')
+        # use regex to match desired value
+        sylCount = re.search("(?<=<b style='color: #008000'>)[0-9]+", response)
+        return sylCount[0];
+
 def normalize_tweet_for_frequency_analysis(tweet):
     normalizedTweet = copy.copy(tweet)
     
@@ -241,12 +261,12 @@ def normalize_tweets_for_difficulty_analysis(tweets):
 if __name__ == '__main__':
     tweet_tokenizer = TweetTokenizer()
     tweets = twitter_samples.strings('tweets.20150430-223406.json')
-    cleanedTweets = normalize_tweets_for_frequency_analysis(tweets)
-    print(get_mean_sentence_length(cleanedTweets))
-    print(get_mean_word_length(cleanedTweets))
+#    cleanedTweets = normalize_tweets_for_frequency_analysis(tweets)
+#    print(get_mean_sentence_length(cleanedTweets))
+#    print(get_mean_word_length(cleanedTweets))
     #cleanedTweets = normalize_tweets_for_difficulty_analysis(tweets)
     #print(cleanedTweets)
     #print(tokenize_tweet("He said: 'Hey, my name is... Tim!' - Tim."))
-    
+    print(get_word_syllables('okokook'))
  
 
