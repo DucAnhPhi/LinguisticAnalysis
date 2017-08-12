@@ -256,7 +256,24 @@ def normalize_tweet_for_difficulty_analysis(tweet):
 
 def normalize_tweets_for_difficulty_analysis(tweets):
     return [ normalize_tweet_for_difficulty_analysis(tweet) for tweet in tweets ]
-    
+
+def get_flesch_readability_ease(tokenizedText):
+    words = sum(tokenizedText, [])
+    numberOfWords = len(words)
+    numberOfSentences = len(tokenizedText)
+    numberOfSyllables = 0
+    for word in words:
+        numberOfSyllables += get_word_syllables(word)
+    return 206.835 - (1.015 * numberOfWords / numberOfSentences) - (84.6 * numberOfSyllables / numberOfWords)
+
+def get_flesch_grade_level(tokenizedText):
+    words = sum(tokenizedText, [])
+    numberOfWords = len(words)
+    numberOfSentences = len(tokenizedText)
+    numberOfSyllables = 0
+    for word in words:
+        numberOfSyllables += get_word_syllables(word)
+    return (0.39 * numberOfWords / numberOfSentences) + (11.8 * numberOfSyllables / numberOfWords) - 15.59
 
 if __name__ == '__main__':
     tweet_tokenizer = TweetTokenizer()
@@ -267,6 +284,10 @@ if __name__ == '__main__':
     #cleanedTweets = normalize_tweets_for_difficulty_analysis(tweets)
     #print(cleanedTweets)
     #print(tokenize_tweet("He said: 'Hey, my name is... Tim!' - Tim."))
-    print(get_word_syllables('okokook'))
+    #print(get_word_syllables('okokook'))
+    #normalized = normalize_tweet_for_frequency_analysis('The Australian platypus is seemingly a hybrid of a mammal and reptilian creature.')
+    #print(normalized)
+    #print(get_flesch_readability_ease(normalized))
+    #print(get_flesch_grade_level(normalized))
  
 
