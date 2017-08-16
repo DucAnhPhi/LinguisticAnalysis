@@ -135,7 +135,7 @@ def get_word_syllables(word):
         response = request.read().decode('utf-8')
         # use regex to match desired value
         sylCount = re.search("(?<=<b style='color: #008000'>)[0-9]+", response)
-        return sylCount[0];
+        return int(sylCount[0]);
 
 def get_twitter_corpus():
     tweets = twitter_samples.strings('tweets.20150430-223406.json')
