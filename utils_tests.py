@@ -74,6 +74,8 @@ class UtilTests(unittest.TestCase):
         self.assertEqual(to_string(ut.remove_special_characters(s)), "here are some emoticons without letters or numbers in them")
 #---------------------------------------------------------
 
+
+#------ test remove functions ----------------------------
     def test_no_tweet_prefix(self):
         s = "RT @Staircase2: blablabla"
         self.assertEqual(ut.remove_tweet_prefix(s), "blablabla")
@@ -86,6 +88,13 @@ class UtilTests(unittest.TestCase):
         s = r"some links http://t.co/rlqo5xfbul www.google.com bplaced.homepage.net/article/2221 g.com g.co"
         self.assertEqual(ut.remove_links(s), "some links")
 
+    def test_no_stopwords(self):
+        s = "I couldn't wouldn't to do this"
+        self.assertEqual(ut.remove_stopwords(s), "")
+#---------------------------------------------------------
+
+
+#------ test split functions -----------------------------
     def test_split_compounds(self):
         s = "e-mail enterprise-level level-14 three-level-building best-in-class"
         self.assertEqual(ut.split_compounds(s), "e mail enterprise level level 14 three level building best in class")
@@ -93,10 +102,16 @@ class UtilTests(unittest.TestCase):
     def test_split_contractions(self):
         s = r"I'm won't we'll can't he's that's there's"
         self.assertEqual(ut.split_contractions(s), "i m won t we ll can t he s that s there s")
+#---------------------------------------------------------
 
-    def test_no_stopwords(self):
-        s = "I couldn't wouldn't to do this"
-        self.assertEqual(ut.remove_stopwords(s), "")
+
+#------ test count functions -----------------------------
+    def test_count_word_syllables(self):
+        s1 = "123456789"
+        s2 = "supercalifragilisticexpialidocious"
+        self.assertEqual(ut.get_word_syllables(s1), 0)
+        self.assertEqual(ut.get_word_syllables(s2), 14)
+#---------------------------------------------------------
         
 
 if __name__ == '__main__':
