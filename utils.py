@@ -9,7 +9,6 @@ Reuseable functions
 """
 
 import re
-import time
 import urllib.request
 from nltk.corpus import stopwords
 from nltk.corpus import twitter_samples
@@ -115,12 +114,14 @@ def remove_stopwords(text):
     filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in tokenizedText ]
     return " ".join(sum(filtered, []))
 
+def remove_empty_sentences(tokenizedText):
+    return [ sentence for sentence in tokenizedText if len(sentence) ]
+
 
 """
 GETTER functions
 """
 def get_word_syllables(word, pronouncingDict):
-    start = time.perf_counter()
     # returns a list of transcriptions for a word - a word may have alternative pronunciations
     # eg. 'orange' -> [['AO1', 'R', 'AH0', 'N', 'JH'], ['A01', 'R', 'IH0', 'N', 'JH']]
     # vowels are marked with numbers from 0-2
@@ -129,8 +130,6 @@ def get_word_syllables(word, pronouncingDict):
         # last element is more common
         pronList = pronouncingDict[word.lower()][-1]
         sylCount = len([ syl for syl in pronList if syl[-1].isdecimal() ])
-        end = time.perf_counter()
-        print('time elapsed after lookup: ', end-start)
         return sylCount
     except KeyError:
         # scrape syllable count
@@ -139,25 +138,18 @@ def get_word_syllables(word, pronouncingDict):
         response = request.read().decode('utf-8')
         # use regex to match desired value
         sylCount = int(re.search("(?<=<b style='color: #008000'>)[0-9]+", response)[0])
-        end = time.perf_counter()
-        print('time elapsed after scraping: ', end-start)
         return sylCount;
 
 def get_word_syllables_offline(word, pronouncingDict):
-    start = time.perf_counter()
     # offline version of get_word_syllables function
     # may be less accurate but more performant
     try:
         pronList = pronouncingDict[word.lower()][-1]
         sylCount = len([ syl for syl in pronList if syl[-1].isdecimal() ])
-        end = time.perf_counter()
-        print('time elapsed after lookup: ', end-start)
         return sylCount
     except KeyError:
         # regex from: https://codegolf.stackexchange.com/questions/47322/how-to-count-the-syllables-in-a-word
         sylCount = len(re.findall(r'[aiouy]+e*|e(?!d$|ly).|[td]ed|le$', word))
-        end = time.perf_counter()
-        print('time elapsed after computation: ', end-start)
         return sylCount
 
 def get_twitter_corpus():
