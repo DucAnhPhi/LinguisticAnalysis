@@ -122,7 +122,8 @@ class UtilTests(unittest.TestCase):
                 "embezzlement": 4
         }
         for string in strings:
-            self.assertEqual(ut.get_word_syllables(string, pronouncingDict), strings[string])
+            sylCount = ut.get_word_syllables(string, pronouncingDict)
+            self.assertEqual(sylCount, strings[string])
 
     def test_count_word_syllables_offline(self):
         pronouncingDict = cmudict.dict()
