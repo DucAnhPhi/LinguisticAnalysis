@@ -109,17 +109,44 @@ class UtilTests(unittest.TestCase):
 #------ test count functions -----------------------------
     def test_count_word_syllables(self):
         pronouncingDict = cmudict.dict()
-        s1 = "123456789"
-        s2 = "supercalifragilisticexpialidocious"
-        self.assertEqual(ut.get_word_syllables(s1, pronouncingDict), 0)
-        self.assertEqual(ut.get_word_syllables(s2, pronouncingDict), 14)
+        strings = {
+                "123456789": 0,
+                "supercalifragilisticexpialidocious": 14,
+                "demagogue": 3,
+                "anathema": 4,
+                "payday": 2,
+                "Syrian": 3,
+                "crepuscular": 4,
+                "preservative": 4,
+                "significantly": 5,
+                "embezzlement": 4
+        }
+        for string in strings:
+            self.assertEqual(ut.get_word_syllables(string, pronouncingDict), strings[string])
 
     def test_count_word_syllables_offline(self):
         pronouncingDict = cmudict.dict()
-        s1 = "123456789"
-        s2 = "supercalifragilisticexpialidocious"
-        self.assertEqual(ut.get_word_syllables_offline(s1, pronouncingDict), 0)
-        self.assertEqual(ut.get_word_syllables_offline(s2, pronouncingDict), 14)
+        strings = {
+                "123456789": 0,
+                "supercalifragilisticexpialidocious": 14,
+                "demagogue": 3,
+                "anathema": 4,
+                "payday": 2,
+                "Syrian": 3,
+                "crepuscular": 4,
+                "preservative": 4,
+                "significantly": 5,
+                "embezzlement": 4
+        }
+        accuracy = 0
+        for string in strings:
+            sylCount = ut.get_word_syllables_offline(string, pronouncingDict)
+            if sylCount == strings[string]:
+                accuracy += 10
+        print("accuracy: " + str(accuracy) + "%")
+        for string in strings:
+            sylCount = ut.get_word_syllables_offline(string, pronouncingDict)
+            self.assertEqual(sylCount, strings[string])
 #---------------------------------------------------------
         
 
