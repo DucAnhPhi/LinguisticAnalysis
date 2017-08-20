@@ -10,6 +10,7 @@ Unittests for utils.py
 
 import unittest
 import utils as ut
+from nltk.corpus import cmudict
 
 
 def to_string(tokenized):
@@ -107,10 +108,18 @@ class UtilTests(unittest.TestCase):
 
 #------ test count functions -----------------------------
     def test_count_word_syllables(self):
+        pronouncingDict = cmudict.dict()
         s1 = "123456789"
         s2 = "supercalifragilisticexpialidocious"
-        self.assertEqual(ut.get_word_syllables(s1), 0)
-        self.assertEqual(ut.get_word_syllables(s2), 14)
+        self.assertEqual(ut.get_word_syllables(s1, pronouncingDict), 0)
+        self.assertEqual(ut.get_word_syllables(s2, pronouncingDict), 14)
+
+    def test_count_word_syllables_offline(self):
+        pronouncingDict = cmudict.dict()
+        s1 = "123456789"
+        s2 = "supercalifragilisticexpialidocious"
+        self.assertEqual(ut.get_word_syllables_offline(s1, pronouncingDict), 0)
+        self.assertEqual(ut.get_word_syllables_offline(s2, pronouncingDict), 14)
 #---------------------------------------------------------
         
 
