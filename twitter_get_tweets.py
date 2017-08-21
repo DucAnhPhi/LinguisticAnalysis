@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri May 26 15:35:15 2017
-Get all tweets of a specific user
+Get max. amount of tweets for a specific user
 @author: duc
 """
 
