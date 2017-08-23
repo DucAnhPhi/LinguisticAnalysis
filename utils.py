@@ -42,8 +42,6 @@ def split_compounds(text):
 def tokenize(text, tokenizer = TweetTokenizer()):
     return [ tokenizer.tokenize(sentence) for sentence in sent_tokenize(text) ]
 
-def to_lower(tweets):
-    return [ tweet.lower() for tweet in tweets ]
 
 """
 BOOLEAN functions
@@ -115,13 +113,11 @@ def remove_emoticons(text):
     removed = tokenize(removed)
     return " ".join(sum(removed, []))
 
-def remove_stopwords(text):
-    normalizedText = text.lower()
-    normalizedText = split_contractions(normalizedText)
-    tokenizedText = tokenize(normalizedText)
+def remove_stopwords(normalizedText):
     stopwordList = stopwords.words('english')
-    filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in tokenizedText ]
-    return " ".join(sum(filtered, []))
+    filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in normalizedText ]
+    filtered = remove_empty_sentences(filtered)
+    return filtered
 
 def remove_empty_sentences(tokenizedText):
     return [ sentence for sentence in tokenizedText if len(sentence) ]

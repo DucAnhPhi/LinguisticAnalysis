@@ -36,10 +36,7 @@ def normalize(text):
 
     normalizedText = utils.remove_empty_sentences(normalizedText)
 
-    if not len(text):
-        return []
-    else:
-        return normalizedText
+    return normalizedText
 
 def get_flesch_readability_ease(tokenizedText, pronouncingDict):
     words = sum(tokenizedText, [])

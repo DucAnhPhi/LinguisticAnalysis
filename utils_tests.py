@@ -3,7 +3,7 @@
 """
 Created on Mon Jul  3 23:36:17 2017
 
-Unittests for utils.py
+Unit tests for utils.py
 
 @author: duc
 """
