@@ -90,8 +90,8 @@ class UtilTests(unittest.TestCase):
         self.assertEqual(ut.remove_links(s), "some links")
 
     def test_no_stopwords(self):
-        s = "I couldn't wouldn't to do this"
-        self.assertEqual(ut.remove_stopwords(s), "")
+        s = [["i", "couldn","t", "wouldn", "t", "to", "do", "this"]]
+        self.assertEqual(ut.remove_stopwords(s), [[]])
 #---------------------------------------------------------
 
 
