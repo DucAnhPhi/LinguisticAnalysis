@@ -42,6 +42,8 @@ def split_compounds(text):
 def tokenize(text, tokenizer = TweetTokenizer()):
     return [ tokenizer.tokenize(sentence) for sentence in sent_tokenize(text) ]
 
+def to_lower(tweets):
+    return [ tweet.lower() for tweet in tweets ]
 
 """
 BOOLEAN functions
@@ -65,6 +67,13 @@ def is_not_compound(string):
 
 def is_not_emoticon(string):
      return string.lower() not in emoticons
+
+def is_retweet(text):
+    rtPattern = re.compile(r"^rt @", flags=re.IGNORECASE)
+    if rtPattern.match(text):
+        return True
+    else:
+        return False
 
 
 """
