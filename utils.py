@@ -126,6 +126,13 @@ def remove_empty_sentences(tokenizedText):
 """
 GETTER functions
 """
+def get_word_difficulty(word):
+    url = 'http://www.dictionary.com/browse/' + word
+    request = urllib.request.urlopen(url)
+    difficulty = re.search('(?<=data-difficulty=")[0-9]+', request.read().decode('utf-8'))
+    if difficulty:
+        return difficulty[0]
+
 def get_word_syllables(word, pronouncingDict):
     # returns a list of transcriptions for a word - a word may have alternative pronunciations
     # eg. 'orange' -> [['AO1', 'R', 'AH0', 'N', 'JH'], ['A01', 'R', 'IH0', 'N', 'JH']]
