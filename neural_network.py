@@ -16,7 +16,7 @@ Created on Thu Aug 24 20:30:37 2017
 
 import numpy as np
 from numpy import dot
-import Dataset
+import dataset
    
 
 def concat_bias(bias, x):
@@ -46,7 +46,7 @@ class NeuralNetwork:
         self.outputNeurons = outputNeurons
 
         # initialize input data
-        data = Dataset.getInput2()
+        data = dataset.getInput2()
         self.input = data[0]
         # input nodes
         self.inputColumns = data[0].shape[1]
