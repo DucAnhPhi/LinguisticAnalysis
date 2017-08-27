@@ -72,11 +72,14 @@ def get_average_question_marks(tweets):
 
 #------ functions below require normalized and tokenized text -----------------
 def get_average_word_characters(tweets):
-    words = sum(tweets, [])
-    count = 0
-    for word in words:
-        count += len(word)
-    amount = count / len(words)
+    charCount = 0
+    words = 0
+    for tweet in tweets:
+        for sentence in tweet:
+            for word in sentence:
+                words += 1
+                charCount += len(word)
+    amount = charCount / words
     print("Average word length: ", amount, " characters")
     return amount
 
