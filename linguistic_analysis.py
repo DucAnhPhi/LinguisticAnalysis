@@ -84,6 +84,14 @@ def get_average_sentence_length(tweets):
     print("Average sentence length: ", amount, " words")
     return amount
 
+def get_sentence_length(tweet):
+    wordCount = 0
+    sentenceCount = 0
+    for sentence in tweet:
+        wordCount += len(sentence)
+        sentenceCount += 1
+    return wordCount / sentenceCount
+
 def get_average_tweet_length(tweets):
     wordCount = 0
     for tweet in tweets:
@@ -114,13 +122,11 @@ def get_most_frequent_keywords(tweets):
     print("Most frequent keywords:")
     for tag,count in counter.most_common(25):
         print("{}: {}".format(tag, count))
-    return counter
+    return counter.most_common(25)
 #------------------------------------------------------------------------------
-
-if __name__ == '__main__':
-    user = "realDonaldTrump"
-    tweets = [tweet for tweet in get_max_amount_tweets(user) if not utils.is_retweet(tweet)]
-    norm = [ normalize(tweet) for tweet in tweets if len(normalize(tweet)) if not utils.is_retweet(tweet) ]
+def get_linguistic_analysis(user):
+    tweets = utils.remove_retweets(get_max_amount_tweets(user))
+    norm = [ utils.normalize(tweet) for tweet in tweets if len(utils.normalize(tweet)) if not utils.is_retweet(tweet) ]
     print("Linguistic Analysis of ", user)
     get_average_word_characters(norm)
     get_average_word_syllables(norm)
@@ -129,4 +135,7 @@ if __name__ == '__main__':
     get_average_question_marks(tweets)
     get_average_exclamation_marks(tweets)
     get_average_flesch_grade_level(norm)
-    get_most_frequent_keywords(norm)
+    print(get_most_frequent_keywords(norm))
+
+if __name__ == '__main__':
+    get_linguistic_analysis("HillaryClinton")
