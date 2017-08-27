@@ -51,7 +51,7 @@ def get_average_question_marks(tweets):
     print("Average question marks per tweet: ", amount)
     return amount
 
-#------ functions below require normalized and tokenized text -----------------
+#------ functions below require preprocessed and tokenized text -----------------
 def get_average_word_characters(tweets):
     charCount = 0
     words = 0
@@ -130,7 +130,7 @@ def get_most_frequent_keywords(tweets):
 #------------------------------------------------------------------------------
 def get_linguistic_analysis(user):
     tweets = utils.remove_retweets(get_max_amount_tweets(user))
-    norm = [ utils.normalize(tweet) for tweet in tweets if len(utils.normalize(tweet)) if not utils.is_retweet(tweet) ]
+    norm = [ utils.preprocess(tweet) for tweet in tweets if len(utils.preprocessed(tweet)) if not utils.is_retweet(tweet) ]
     print("Linguistic Analysis of ", user)
     get_average_word_characters(norm)
     get_average_word_syllables(norm)

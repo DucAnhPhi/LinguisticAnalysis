@@ -21,7 +21,7 @@ from assets.emoticons import emoticons
 
 
 def split_contractions(text):
-    normalizedText = text.lower()
+    preprocessedText = text.lower()
     contractionsPattern = re.compile('({})'.format('|'.join(contractions.keys())), flags=re.IGNORECASE|re.DOTALL)
 
     def split_match(contraction):
@@ -29,7 +29,7 @@ def split_contractions(text):
         splitContraction = " ".join(match.split("'"))
         return splitContraction
 
-    return re.sub(contractionsPattern, split_match, normalizedText)
+    return re.sub(contractionsPattern, split_match, preprocessedText)
 
 def split_compounds(text):
     compoundPattern = r'\b\w*-\w*\b'
@@ -43,28 +43,28 @@ def split_compounds(text):
 def tokenize(text, tokenizer = TweetTokenizer()):
     return [ tokenizer.tokenize(sentence) for sentence in sent_tokenize(text) ]
 
-def normalize(tweet):
-    normalized = copy.copy(tweet)
-    normalized = normalized.lower()
+def preprocess(tweet):
+    preprocessed = copy.copy(tweet)
+    preprocessed = preprocessed.lower()
 
     # remove some emoticons the TweetTokenizer does not know
-    normalized = remove_emoticons(normalized)
+    preprocessed = remove_emoticons(preprocessed)
 
     # split contractions like "he's" -> "he s", using imported contractions dictionary
-    normalized = split_contractions(normalized)
+    preprocessed = split_contractions(preprocessed)
 
     # split compounds like "next-level" -> "next level"
-    normalized = split_compounds(normalized)
+    preprocessed = split_compounds(preprocessed)
 
     # remove links
-    normalized = remove_links(normalized)
+    preprocessed = remove_links(preprocessed)
 
     # remove all special characters and return tokenized text
-    normalized = remove_special_characters(normalized)
+    preprocessed = remove_special_characters(preprocessed)
 
-    normalized = remove_empty_sentences(normalized)
+    preprocessed = remove_empty_sentences(preprocessed)
 
-    return normalized
+    return preprocessed
 
 
 """
@@ -133,9 +133,9 @@ def remove_emoticons(text):
     removed = tokenize(removed)
     return " ".join(sum(removed, []))
 
-def remove_stopwords(normalizedText):
+def remove_stopwords(preprocessedText):
     stopwordList = stopwords.words('english')
-    filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in normalizedText ]
+    filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in preprocessedText ]
     return filtered
 
 def remove_empty_sentences(tokenizedText):
