@@ -101,12 +101,8 @@ def is_retweet(text):
 """
 REMOVE functions
 """
-def remove_tweet_prefix(text):
-    cleanedTweet = tokenize(text.lower())
-    # Remove prefix 'RT @username:'
-    if cleanedTweet[0][0] == 'rt':
-        del cleanedTweet[0][:3]
-    return " ".join(sum(cleanedTweet, []))
+def remove_retweets(tweets):
+    return [ tweet for tweet in tweets if not is_retweet(tweet) ]
 
 def remove_links(text):
     tokenizedText = tokenize(text)
