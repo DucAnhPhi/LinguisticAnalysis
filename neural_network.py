@@ -110,5 +110,3 @@ class NeuralNetwork:
 
 if __name__ == '__main__':
     np.set_printoptions(threshold = 1000, precision=4, suppress=True)
-    nn = NeuralNetwork(3000, 1, 2, 1, 1, dataset.getInput2())
-    nn.train()

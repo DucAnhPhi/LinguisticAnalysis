@@ -17,11 +17,6 @@ import flesch_kincaid as fk
 import neural_network as nn
 
 
-def get_xor():
-    input = np.array([[0,0],[1,0],[0,1],[1,1]])
-    output = np.array([[0],[1],[1],[0]])
-    return(input, output)
-
 def get_combined_keywords(tweets1, tweets2):
     # get combined list of top 25 most used keywords
     keywords1 = la.get_most_frequent_keywords(tweets1)
