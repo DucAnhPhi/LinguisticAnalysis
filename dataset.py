@@ -17,6 +17,15 @@ import flesch_kincaid as fk
 import neural_network as nn
 
 
+def normalize(data):
+    normalized = copy.deepcopy(data)
+    # since there are no negative values we can just divide each column
+    # elementwise by its maximum, in order to get values between 0 and 1
+    # from https://stackoverflow.com/questions/29661574/normalize-numpy-array-columns-in-python
+    # access on 27.08.2017 23:27
+    normalized = normalized / normalized.max(axis = 0)
+    return normalized
+
 def get_combined_keywords(tweets1, tweets2):
     # get combined list of top 25 most used keywords
     keywords1 = la.get_most_frequent_keywords(tweets1)
@@ -84,11 +93,12 @@ def get_tweet_data(person1, person2):
     # label data
     data1 = nn.concat_bias(1, data1)
     data2 = nn.concat_bias(0, data2)
-    print(data1, "\n")
-    print(data2, "\n")
 
     # concatenate vertically
     data = np.r_[data1, data2]
+    # normalize all the data
+    data = normalize(data)
+    print(data)
 
 
 if __name__ == '__main__':
