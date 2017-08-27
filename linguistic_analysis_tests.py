@@ -11,8 +11,11 @@ Unit test for linguistic_analysis.py
 import unittest
 import linguistic_analysis as la
 
-tweets = ["Is this not a question?!", "Sure! Why not?"]
-norm = [[["is", "this", "not", "a", "question"]],[["sure", "why", "not"]]]
+tweets = ["Is this not a question?! Interactive introduction reference information", "Sure! Why not?"]
+norm = [
+        [["is", "this", "not", "a", "question"], ["interactive", "introduction", "reference", "information"]],
+        [["sure", "why", "not"]]
+]
 
 class LinguisticAnalysisTests(unittest.TestCase):
 
@@ -24,11 +27,11 @@ class LinguisticAnalysisTests(unittest.TestCase):
     
     def test_average_word_characters(self):
         number = la.get_average_word_characters(norm)
-        self.assertEqual(round(number), 4)
+        self.assertEqual(round(number), 6)
     
     def test_average_word_syllables(self):
         number = la.get_average_word_syllables(norm)
-        self.assertEqual(round(number), 1)
+        self.assertEqual(round(number), 2)
     
     def test_average_sentence_length(self):
         number = la.get_average_sentence_length(norm)
@@ -36,7 +39,7 @@ class LinguisticAnalysisTests(unittest.TestCase):
     
     def test_average_tweet_length(self):
         number = la.get_average_tweet_length(norm)
-        self.assertEqual(round(number), 4)
+        self.assertEqual(round(number), 6)
     
     def test_most_frequent_words(self):
         most = la.get_most_frequent_keywords(norm)
