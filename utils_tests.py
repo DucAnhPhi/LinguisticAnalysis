@@ -77,10 +77,6 @@ class UtilTests(unittest.TestCase):
 
 
 #------ test remove functions ----------------------------
-    def test_no_tweet_prefix(self):
-        s = "RT @Staircase2: blablabla"
-        self.assertEqual(ut.remove_tweet_prefix(s), "blablabla")
-
     def test_no_emoticons_with_letters_or_numbers(self):
         s = r"here are some emoticons containing letters or numbers :D :d :P :p :'D xd :o which the tokenizer may not know :-3 :3 8) 8-) <3 </3"
         self.assertEqual(ut.remove_emoticons(s), "here are some emoticons containing letters or numbers which the tokenizer may not know")
