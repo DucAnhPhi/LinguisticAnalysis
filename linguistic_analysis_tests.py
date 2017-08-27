@@ -40,11 +40,6 @@ class LinguisticAnalysisTests(unittest.TestCase):
     def test_average_tweet_length(self):
         number = la.get_average_tweet_length(norm)
         self.assertEqual(round(number), 6)
-    
-    def test_most_frequent_words(self):
-        most = la.get_most_frequent_keywords(norm)
-        self.assertEqual(most["question"], 1)
-        self.assertEqual(most["sure"], 1)
 
 
 if __name__ == '__main__':

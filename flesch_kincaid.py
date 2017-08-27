@@ -65,8 +65,3 @@ if __name__ == '__main__':
     # get text with highest flesch grade level score
     maxGrade = get_text_with_max_or_min_readability_score(normalizedTweets, get_flesch_grade_level, pronouncingDict, True)
     print(maxGrade)
-
-#    normalized = normalize('The Australian platypus is seemingly a hybrid of a mammal and reptilian creature.')
-#    print(normalized)
-#    print(get_flesch_readability_ease(normalized))
-#    print(get_flesch_grade_level(normalized))

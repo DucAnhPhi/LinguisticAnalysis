@@ -100,7 +100,6 @@ class NeuralNetwork:
         d = [0] * len(self.thetas)
         # initialize first delta at last position
         d[-1] = (a[-1] - self.output) * dsigmoid(a[-1])
-        #print("delta\n",d[-1])
         # compute as many deltas as there are thetas
         for j in range(len(self.thetas)-2, -1, -1):
             d[j] = dot(d[j+1], tempThetas[j]) * dsigmoid(a[j+1])

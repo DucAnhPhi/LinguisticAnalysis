@@ -140,7 +140,6 @@ def remove_emoticons(text):
 def remove_stopwords(normalizedText):
     stopwordList = stopwords.words('english')
     filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in normalizedText ]
-    filtered = remove_empty_sentences(filtered)
     return filtered
 
 def remove_empty_sentences(tokenizedText):
