@@ -9,6 +9,7 @@ Reuseable functions
 """
 
 import re
+import copy
 import urllib.request
 from nltk.corpus import stopwords
 from nltk.corpus import twitter_samples
@@ -41,6 +42,29 @@ def split_compounds(text):
 
 def tokenize(text, tokenizer = TweetTokenizer()):
     return [ tokenizer.tokenize(sentence) for sentence in sent_tokenize(text) ]
+
+def normalize(tweet):
+    normalized = copy.copy(tweet)
+    normalized = normalized.lower()
+
+    # remove some emoticons the TweetTokenizer does not know
+    normalized = remove_emoticons(normalized)
+
+    # split contractions like "he's" -> "he s", using imported contractions dictionary
+    normalized = split_contractions(normalized)
+
+    # split compounds like "next-level" -> "next level"
+    normalized = split_compounds(normalized)
+
+    # remove links
+    normalized = remove_links(normalized)
+
+    # remove all special characters and return tokenized text
+    normalized = remove_special_characters(normalized)
+
+    normalized = remove_empty_sentences(normalized)
+
+    return normalized
 
 
 """

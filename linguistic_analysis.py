@@ -10,35 +10,12 @@ Linguistic analysis of tweets
 
 import utils
 import re
-import copy
 from nltk.corpus import cmudict
 from tweepy import Cursor
 from twitter_api_setup import get_twitter_client
 from collections import Counter
 from flesch_kincaid import get_flesch_grade_level
 
-def normalize(tweet):
-    normalized = copy.copy(tweet)
-    normalized = normalized.lower()
-
-    # remove some emoticons the TweetTokenizer does not know
-    normalized = utils.remove_emoticons(normalized)
-
-    # split contractions like "he's" -> "he s", using imported contractions dictionary
-    normalized = utils.split_contractions(normalized)
-
-    # split compounds like "next-level" -> "next level"
-    normalized = utils.split_compounds(normalized)
-
-    # remove links
-    normalized = utils.remove_links(normalized)
-
-    # remove all special characters and return tokenized text
-    normalized = utils.remove_special_characters(normalized)
-
-    normalized = utils.remove_empty_sentences(normalized)
-
-    return normalized
 
 def get_max_amount_tweets(user):
     maxTweets = []

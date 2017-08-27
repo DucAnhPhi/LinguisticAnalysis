@@ -8,35 +8,9 @@ Compute Flesch Kincaid readability tests
 @author: duc
 """
 
-import copy
 import utils
 from nltk.corpus import cmudict
 
-def normalize(text):
-    normalizedText = copy.copy(text)
-
-     # remove tweet specific prefix
-    normalizedText = utils.remove_tweet_prefix(normalizedText)
-
-    # remove some emoticons the TweetTokenizer does not know
-    normalizedText = utils.remove_emoticons(normalizedText)
-
-    # split contractions like "he's" -> "he s", using imported contractions dictionary
-    normalizedText = utils.split_contractions(normalizedText)
-
-    # split compounds like "next-level" -> "next level"
-    normalizedText = utils.split_compounds(normalizedText)
-
-    # remove links
-    normalizedText = utils.remove_links(normalizedText)
-
-    # remove all special characters
-    # return normalized text tokenized
-    normalizedText = utils.remove_special_characters(normalizedText)
-
-    normalizedText = utils.remove_empty_sentences(normalizedText)
-
-    return normalizedText
 
 def get_flesch_readability_ease(tokenizedText, pronouncingDict):
     words = sum(tokenizedText, [])
@@ -76,7 +50,7 @@ def get_text_with_max_or_min_readability_score(corpus, function, pronouncingDict
 if __name__ == '__main__':
     pronouncingDict = cmudict.dict()
     tweets = utils.get_twitter_corpus()
-    normalizedTweets = [ normalize(tweet) for tweet in tweets if len(normalize(tweet)) ]
+    normalizedTweets = [ utils.normalize(tweet) for tweet in tweets if len(utils.normalize(tweet)) ]
 
     # get text with lowest flesch readability ease score
     minEase = get_text_with_max_or_min_readability_score(normalizedTweets, get_flesch_readability_ease, pronouncingDict, False)
