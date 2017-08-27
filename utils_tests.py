@@ -148,7 +148,11 @@ class UtilTests(unittest.TestCase):
                 accuracy += 10
         print("\nsyllable counter offline accuracy: " + str(accuracy) + "%")
 #---------------------------------------------------------
-        
+
+    def test_normalize(self):
+        s = r"💪🔥 >:( xd <3 :'D http://t.co/rlqo5xfbul www.google.com e-mail three-level-building I'm wouldn't @trump #bad 1.2 Hi, my name is: Jon!? Next sentence."
+        self.assertEqual(to_string(ut.normalize(s)), "e mail three level building i m wouldn t trump bad 12 hi my name is jon next sentence")
+
 
 if __name__ == '__main__':
     unittest.main()
