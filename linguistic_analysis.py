@@ -38,6 +38,10 @@ def get_average_exclamation_marks(tweets):
     print("Average exclamation marks per tweet: ", amount)
     return amount
 
+def get_exclamation_marks(tweet):
+    exclamationMark = re.compile(r"\!")
+    return len(exclamationMark.findall(tweet))
+
 def get_average_question_marks(tweets):
     count = 0
     for tweet in tweets:
