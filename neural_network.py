@@ -56,14 +56,12 @@ class NeuralNetwork:
 
         # initialize training data
         self.input = inputData
-        print("input:\n",self.input)
         # input nodes
         self.inputColumns = inputData.shape[1]
         # amount of input data
         self.m = inputData.shape[0]
         self.output = outputData
         #self.output = np.array([[0.5], [0.35]])
-        print("output:\n",self.output)
 
         # initialize cross validation data
         self.cvInput = cvInputData
@@ -89,9 +87,7 @@ class NeuralNetwork:
         self.thetas = []
         for i in range(0, hiddenLayers):
             self.thetas.append(np.random.rand(self.inputColumns + 1, inputNeurons)-0.5)
-            print("initial theta", i+1, ":\n", self.thetas[i])
         self.thetas.append(np.random.rand(inputNeurons + 1, outputNeurons)-0.5)
-        print("initial theta", hiddenLayers+1,":\n",self.thetas[hiddenLayers])
 
     def train(self):
 
@@ -111,7 +107,6 @@ class NeuralNetwork:
             if len(self.testInput) and len(self.testOutput):
                 self.set_prediction_rate()
 
-        print("Prediction =\n", self.forward_pass(self.input)[-1])
         self.plot()
 
     def forward_pass(self, inputData):
