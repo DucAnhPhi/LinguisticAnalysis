@@ -155,7 +155,3 @@ def divide_data_into_sets(data, testAmount, cvAmount, trainingAmount):
 
     # return (still) labeled data sets as 2D arrays
     return (np.array(testSet), np.array(cvSet), np.array(trainingSet))
-
-
-if __name__ == '__main__':
-    np.set_printoptions(threshold = 10000, precision=4, suppress=True)
