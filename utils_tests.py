@@ -88,6 +88,10 @@ class UtilTests(unittest.TestCase):
     def test_no_stopwords(self):
         s = [["i", "couldn","t", "wouldn", "t", "to", "do", "this"]]
         self.assertEqual(ut.remove_stopwords(s), [[]])
+
+    def test_no_retweets(self):
+        s = ["RT @realDonaldTrump: This is really sad! Fake news.", "Some random tweet", "RT @test: test"]
+        self.assertEqual(ut.remove_retweets(s), ["Some random tweet"])
 #---------------------------------------------------------
 
 
