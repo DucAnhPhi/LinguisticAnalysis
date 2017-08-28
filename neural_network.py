@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Aug 24 20:30:37 2017
+
 Neural network for supervised machine learning
+
 @author: duc
 """
 
