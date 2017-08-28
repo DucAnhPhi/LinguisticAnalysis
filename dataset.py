@@ -154,7 +154,7 @@ def divide_data_into_sets(data, testAmount, cvAmount, trainingAmount):
     cvSet = remainingData[half:len(remainingData)]
 
     # return (still) labeled data sets as 2D arrays
-    return (testSet, cvSet, trainingSet)
+    return (np.array(testSet), np.array(cvSet), np.array(trainingSet))
 
 
 if __name__ == '__main__':
