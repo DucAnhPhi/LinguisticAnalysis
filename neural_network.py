@@ -174,16 +174,16 @@ class NeuralNetwork:
         plt.ylabel("error")
         plt.xlabel("iterations")
         if len(self.cvErrors):
-            plt.plot(x, self.trainErrors, 'bs', x, self.cvErrors, 'ro')
+            plt.plot(x, self.trainErrors, 'b-', x, self.cvErrors, 'r-')
         else:
-            plt.plot(x, self.trainErrors, 'bs')
+            plt.plot(x, self.trainErrors, 'b-')
 
         if len(self.predictionRates):
             # prediction rate
             plt.figure(2)
             plt.ylabel("prediction rate")
             plt.xlabel("iterations")
-            plt.plot(x, self.predictionRates, 'g^')
+            plt.plot(x, self.predictionRates, 'g-')
 
         plt.show()
 
