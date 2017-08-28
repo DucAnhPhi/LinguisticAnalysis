@@ -11,6 +11,7 @@ Prepare datasets for neural_network.py
 import numpy as np
 import utils
 import copy
+from random import shuffle
 from nltk.corpus import cmudict
 import linguistic_analysis as la
 import flesch_kincaid as fk
@@ -67,7 +68,7 @@ def extract_features(tweets, preprocessedTweets, keywordsCount, pronDict):
         extracted.append(features)
     return extracted
 
-def get_tweet_data(person1, person2):
+def get_prepared_tweet_data(person1, person2):
     # get tweets
     tweets1 = la.get_max_amount_tweets(person1)
     tweets2 = la.get_max_amount_tweets(person2)
@@ -98,9 +99,57 @@ def get_tweet_data(person1, person2):
     data = np.r_[data1, data2]
     # normalize all the data
     data = normalize(data)
+    return data
     print(data)
+
+def divide_data_into_sets(data, testAmount, cvAmount, trainingAmount):
+    # count positive and negative examples
+    pCount = 0
+    nCount = 0
+    for element in data:
+        label = element[0]
+        if label == 1:
+            pCount += 1
+        elif label == 0:
+            nCount += 1
+
+    # initialize positive and negative count for training set
+    # which contains 50% positive and 50% negative examples
+    trainingSetSize = trainingAmount * len(data)
+    pCount = min(pCount, nCount) * trainingAmount / 2
+    if trainingSetSize / 2 >= pCount:
+        pCount = int(trainingSetSize / 2)
+    nCount = copy.copy(pCount)
+
+    origData = data.tolist()
+    remainingData = data.tolist()
+    trainingSet = []
+
+    # compose training set
+    for e in origData:
+        label = e[0]
+        if label == 1 and pCount != 0:
+            pCount -= 1
+            trainingSet.append(e)
+            remainingData.remove(e)
+        elif label == 0 and nCount != 0:
+            nCount -= 1
+            trainingSet.append(e)
+            remainingData.remove(e)
+
+    # shuffle training and remaining data
+    shuffle(trainingSet)
+    shuffle(remainingData)
+
+    # compose test and cross validation set
+    half = int(len(remainingData) / 2)
+    testSet = remainingData[0:half]
+    cvSet = remainingData[half:len(remainingData)]
+
+    # return (still) labeled data sets
+    return (testSet, cvSet, trainingSet)
 
 
 if __name__ == '__main__':
     np.set_printoptions(threshold = 10000, precision=4, suppress=True)
-    get_tweet_data("realDonaldTrump", "HillaryClinton")
+    divide_data_into_sets(get_prepared_tweet_data("realDonaldTrump", "HillaryClinton"), 0.1, 0.1, 0.8)
