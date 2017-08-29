@@ -130,7 +130,7 @@ def get_most_frequent_keywords(tweets):
 #------------------------------------------------------------------------------
 def get_linguistic_analysis(user):
     tweets = utils.remove_retweets(get_max_amount_tweets(user))
-    norm = [ utils.preprocess(tweet) for tweet in tweets if len(utils.preprocessed(tweet)) if not utils.is_retweet(tweet) ]
+    norm = [ utils.preprocess(tweet) for tweet in tweets if len(utils.preprocess(tweet)) if not utils.is_retweet(tweet) ]
     print("Linguistic Analysis of ", user)
     get_average_word_characters(norm)
     get_average_word_syllables(norm)
@@ -139,7 +139,7 @@ def get_linguistic_analysis(user):
     get_average_question_marks(tweets)
     get_average_exclamation_marks(tweets)
     get_average_flesch_grade_level(norm)
-    print(get_most_frequent_keywords(norm))
+    get_most_frequent_keywords(norm)
 
 if __name__ == '__main__':
     get_linguistic_analysis("HillaryClinton")
