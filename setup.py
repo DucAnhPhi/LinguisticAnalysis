@@ -9,7 +9,6 @@ Setup script for downloading all dependencies
 """
 
 import pip
-import nltk
 
 
 dependencies = [
@@ -42,6 +41,8 @@ def install():
     for d in dependencies:
         pip.main(['install', d])
     
+    # after nltk module was installed
+    import nltk
     for data in nltk_data:
         nltk.download(data)
 
