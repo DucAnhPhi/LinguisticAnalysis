@@ -37,23 +37,10 @@ $ virtualenv -p python3.6 LinguisticAnalysis
 $ source LinguisticAnalysis/bin/activate
 ```
 
-* Then install all dependencies:
+* Finally install all dependencies running:
 
 ```
-$ pip install -r dependencies.txt
-```
-
-* Finally install NLTK data using the python interpreter:
-
-```
-$ python
-
- >>> import nltk
-
- >>> nltk.download('cmudict')
- >>> nltk.download('stopwords')
- >>> nltk.download('twitter_samples')
- >>> nltk.download('punkt')
+$ python setup.py
 ```
 
 * If you are done working in the virtual environment for the moment, you can deactivate it:
@@ -111,6 +98,7 @@ Executables
 
 * [neural_network.py](neural_network.py): Neural network for supervised machine learning
 * [linguistic_analysis.py](linguistic_analysis.py): Compute textual features of tweets
+* [setup.py](setup.py): Setup script for downloading all dependencies
 
 Other files
 
