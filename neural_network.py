@@ -12,6 +12,7 @@ import numpy as np
 from numpy import dot
 import matplotlib.pyplot as plt
 import dataset as ds
+from nltk.corpus import cmudict
 
 
 def concat_bias(bias, x):
@@ -190,15 +191,47 @@ class NeuralNetwork:
 
 if __name__ == '__main__':
     np.set_printoptions(threshold = 1000, precision=4, suppress=True)
-    data = ds.divide_data_into_sets(ds.get_prepared_tweet_data("realDonaldTrump", "HillaryClinton"), 0.1, 0.1, 0.8)
+    user1 = input("Enter the first Twitter username:\n")
+    user2 = input("Enter the second Twitter username:\n")
+    testDataAmount = float(input("Enter amount of test data (0.8 recommended):\n"))
+    rounds = int(input("Enter training iterations:\n"))
+    learnRate = float(input("Enter learn rate:\n"))
+    hiddenLayers = int(input("Enter amount of hidden layers:\n"))
+    data = ds.Dataset(user1, user2, testDataAmount)
     # test data
-    testInput = data[0][:, 1:]
-    testOutput = data[0][:, [0]]
+    testInput = data.testSet[:, 1:]
+    testOutput = data.testSet[:, [0]]
     # cross validation data
-    cvInput = data[1][:, 1:]
-    cvOutput = data[1][:, [0]]
+    cvInput = data.cvSet[:, 1:]
+    cvOutput = data.cvSet[:, [0]]
     # training data
-    input = data[2][:, 1:]
-    output = data[2][:, [0]]
-    nn = NeuralNetwork(30000,1,input.shape[1],3,1, input, output, cvInput, cvOutput, testInput, testOutput)
+    trainInput = data.trainSet[:, 1:]
+    trainOutput = data.trainSet[:, [0]]
+    nn = NeuralNetwork(
+        rounds,                     # training iterations
+        learnRate,                  # learn rate
+        trainInput.shape[1],        # amount of input neurons
+        hiddenLayers,               # amount of hidden layers
+        1,                          # amount of output neurons
+        trainInput,                 # training input data
+        trainOutput,                # training output data
+        cvInput,                    # cross validation input data
+        cvOutput,                   # cross validation output data
+        testInput,                  # test input data
+        testOutput                  # test output data
+    )
     nn.train()
+    print("The Neural Network has been trained.")
+    while True:
+        tweet = input("Enter a tweet to get a prediction:\n")
+        pronDict = cmudict.dict()
+        featureVector = ds.extract_features(tweet, data.combinedKeywords, pronDict)
+        if len(featureVector) == 0:
+            print("Cannot get a prediction for given tweet.")
+        else:
+            prediction = nn.forward_pass(np.array([featureVector]))[-1]
+            print(prediction)
+            if prediction > 0.5:
+                print("This tweet is probably written by ", user1)
+            else:
+                print("This tweet is probably written by ", user2)
