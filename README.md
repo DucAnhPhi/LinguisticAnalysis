@@ -29,12 +29,12 @@ $ pip install virtualenv
 
 $ cd LinguisticAnalysis
 
-$ virtualenv -p python3.6 LinguisticAnalysis
+$ virtualenv -p python3.6 virtual_env
 ```
 * To begin using the virtual environment, it needs to be activated:
 
 ```
-$ source LinguisticAnalysis/bin/activate
+$ source virtual_env/bin/activate
 ```
 
 * Finally install all dependencies running:
@@ -52,7 +52,7 @@ $ deactivate
 * To delete a virtual environment, just delete its folder.
 
 ```
-rm -rf my_project
+rm -rf virtual_env
 ```
 
 ## Getting started
@@ -92,6 +92,8 @@ $ set TWITTER_ACCESS_TOKEN="your-access-token"
 $ set TWITTER_ACCESS_SECRET="your-access-secret"
 ```
 
+**You are now set up!**
+
 ## Project structure
 
 Executables
@@ -113,6 +115,12 @@ Unit tests
 * [linguistic_analysis_tests.py](linguistic_analysis_tests.py)
 * [dataset_tests.py](dataset_tests.py)
 * [neural_network_tests.py](neural_network_tests.py)
+
+You can run files, using the python interpreter in the terminal:
+
+```
+$ python neural_network.py
+```
 
 ## Author
 
