@@ -10,7 +10,6 @@ Linguistic analysis of tweets
 
 import utils
 import re
-import sys
 from nltk.corpus import cmudict
 from tweepy import Cursor
 from twitter_api_setup import get_twitter_client
@@ -21,12 +20,12 @@ from flesch_kincaid import get_flesch_grade_level
 def get_max_amount_tweets(user):
     maxTweets = []
     api = get_twitter_client()
-    print("fetch tweets")
+    print("\nfetch", user,"'s tweets")
 
     # request to get most recent 3200 tweets
     for tweet in Cursor(api.user_timeline, screen_name=user).items(3200):
         maxTweets.append(tweet.text)
-        
+
     print("done fetching", len(maxTweets),"tweets")
     return maxTweets
 
@@ -129,5 +128,5 @@ def get_linguistic_analysis(user):
 
 
 if __name__ == '__main__':
-    user = sys.argv[1]
+    user = input("Enter the Twitter username of the person you want to analyse:\n")
     get_linguistic_analysis(user)
