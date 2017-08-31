@@ -26,26 +26,23 @@ class DatasetTests(unittest.TestCase):
         np.testing.assert_array_almost_equal(ds.normalize(m), norm, decimal)
 
     def test_combined_keywords(self):
-        t1 = [[["fake", "media"]], [["fake", "news"]]]
-        t2 = [[["women", "hillary"]], [["media", "trump"]]]
-        keywords = set(["fake", "media", "news", "women", "hillary", "trump"])
+        t1 = ["Fake media.", "Fake news."]
+        t2 = ["Women Hillary", "Media Trump"]
+        keywords = {"fake": 0, "media": 0, "news": 0, "women": 0, "hillary": 0, "trump": 0}
         self.assertEqual(ds.get_combined_keywords(t1, t2), keywords)
 
     def test_keywords_count(self):
         t =  [["make", "america", "great", "again"],["america", "was", "great"]]
-        dict = {"make": 0, "america": 0, "great": 0, "again": 0, "was": 0}
+        dictionary = {"make": 0, "america": 0, "great": 0, "again": 0, "was": 0}
         counted = {"make": 1, "america": 2, "great": 2, "again": 1, "was": 1}
-        self.assertEqual(ds.get_keywords_count(t, dict), counted)
+        self.assertEqual(ds.get_keywords_count(t, dictionary), counted)
 
     def test_extract_features(self):
-        t =  ["Make america great again!", "America was great! Hillary Clinton"]
-        norm = [[["make", "america", "great", "again"]],[["america", "was", "great"], ["hillary", "clinton"]]]
-        count = {"make": 0, "america": 0, "great": 0, "again": 0, "was": 0, "hillary": 0, "clinton": 0}
-        features = [
-                [4, 1, lvl(norm[0], pronDict), 1, 1, 1, 1, 0, 0, 0],
-                [2.5, 1, lvl(norm[1], pronDict), 0, 1, 1, 0, 1, 1, 1]
-        ]
-        self.assertEqual(ds.extract_features(t, norm, count, pronDict), features)
+        t =  "Make america great again!"
+        norm = [["make", "america", "great", "again"]]
+        count = {"make": 0, "america": 0, "great": 0, "again": 0}
+        features = [4, 1, lvl(norm, pronDict), 1, 1, 1, 1]
+        self.assertEqual(ds.extract_features(t, count, pronDict), features)
 
     def test_positive_negative_amount(self):
         m = [[0, 1, 0.5, 1, 0.02], [1, 1, 1, 0.3, 0.99], [1, 0, 0, 0, 0]]
@@ -54,11 +51,13 @@ class DatasetTests(unittest.TestCase):
         self.assertEqual(ds.get_positive_negative_amount(n), (2, 1))
 
     def test_training_set(self):
+        dataset = ds.Dataset("realDonaldTrump", "HillaryClinton", 0.8)
         # should have 50% positive and 50% negative examples
-        ts = ds.divide_data_into_sets(ds.get_prepared_tweet_data("realDonaldTrump", "HillaryClinton"), 0.1, 0.1, 0.8)[2]
-        count = ds.get_positive_negative_amount(ts)
+        trainSet = dataset.trainSet
+        count = ds.get_positive_negative_amount(trainSet)
         self.assertEqual(count[0], count[1])
 
 
 if __name__ == '__main__':
+    np.set_printoptions(threshold = 10000, precision=4, suppress=True)
     unittest.main()
