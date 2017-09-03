@@ -154,8 +154,14 @@ class Dataset:
         # extract features
         self.combinedKeywords = get_combined_keywords(tweets1, tweets2)
 
-        data1 = np.array([extract_features(tweet, self.combinedKeywords, self.pronDict) for tweet in tweets1 if len(extract_features(tweet, self.combinedKeywords, self.pronDict))])
-        data2 = np.array([extract_features(tweet, self.combinedKeywords, self.pronDict) for tweet in tweets2 if len(extract_features(tweet, self.combinedKeywords, self.pronDict))])
+        data1 = np.array(
+            [extract_features(tweet, self.combinedKeywords, self.pronDict) for tweet in tweets1
+             if len(extract_features(tweet, self.combinedKeywords, self.pronDict))]
+        )
+        data2 = np.array(
+            [extract_features(tweet, self.combinedKeywords, self.pronDict) for tweet in tweets2
+             if len(extract_features(tweet, self.combinedKeywords, self.pronDict))]
+        )
 
         # label data
         data1 = nn.concat_bias(1, data1)
