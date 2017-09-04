@@ -116,6 +116,11 @@ Unit tests
 * [dataset_tests.py](dataset_tests.py)
 * [neural_network_tests.py](neural_network_tests.py)
 
+Assets
+
+* [assets/emoticons.py](assets/emoticons.py): List of emoticons, which the TweetTokenizer may not know.
+* [assets/contractions.py](assets/contractions.py): Dictionary of common contractions
+
 You can run files, using the python interpreter in the terminal:
 
 ```
