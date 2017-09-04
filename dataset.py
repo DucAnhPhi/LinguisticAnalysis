@@ -102,7 +102,7 @@ def divide_data_into_sets(data, trainDataAmount):
     nCount = copy.copy(pCount)
 
     origData = data.tolist()
-    remainingData = data.tolist()
+    validationSet = data.tolist()
     trainingSet = []
 
     # compose training set
@@ -111,22 +111,18 @@ def divide_data_into_sets(data, trainDataAmount):
         if label == 1 and pCount != 0:
             pCount -= 1
             trainingSet.append(e)
-            remainingData.remove(e)
+            validationSet.remove(e)
         elif label == 0 and nCount != 0:
             nCount -= 1
             trainingSet.append(e)
-            remainingData.remove(e)
+            validationSet.remove(e)
 
-    # shuffle training and remaining data
+    # shuffle training and test set
     shuffle(trainingSet)
-    shuffle(remainingData)
+    shuffle(validationSet)
 
-    # compose test and cross validation set
-    half = int(len(remainingData) / 2)
-    testSet = remainingData[0:half]
-    cvSet = remainingData[half:len(remainingData)]
-
-    return (np.array(testSet), np.array(cvSet), np.array(trainingSet))
+    # return data sets as numpy arrays
+    return (np.array(validationSet), np.array(trainingSet))
 
 
 class Dataset:
@@ -142,9 +138,8 @@ class Dataset:
 
         data = self.get_prepared_tweet_data()
         dividedData = divide_data_into_sets(data, trainDataAmount)
-        self.testSet = dividedData[0]
-        self.cvSet = dividedData[1]
-        self.trainSet = dividedData[2]
+        self.validationSet = dividedData[0]
+        self.trainSet = dividedData[1]
 
     def get_prepared_tweet_data(self):
         # get tweets and remove retweets

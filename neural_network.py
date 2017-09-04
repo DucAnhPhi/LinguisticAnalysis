@@ -43,8 +43,7 @@ class NeuralNetwork:
 
     def __init__(
             self, trainingIterations, learnRate, inputNeurons, hiddenLayers,
-            outputNeurons, inputData, outputData, cvInputData, cvOutputData,
-            testInputData, testOutputData
+            outputNeurons, inputData, outputData, validationInputData, validationOutputData
     ):
 
         self.trainingIterations = trainingIterations
@@ -62,21 +61,16 @@ class NeuralNetwork:
         # amount of input data
         self.m = inputData.shape[0]
         self.output = outputData
-        #self.output = np.array([[0.5], [0.35]])
 
-        # initialize cross validation data
-        self.cvInput = cvInputData
-        self.cvOutput = cvOutputData
-
-        # initialize test data
-        self.testInput = testInputData
-        self.testOutput = testOutputData
+        # initialize validation data
+        self.validationInput = validationInputData
+        self.validationOutput = validationOutputData
 
         # initialize train errors
         self.trainErrors = []
 
-        # initialize cross validation errors
-        self.cvErrors = []
+        # initialize validation errors
+        self.validationErrors = []
 
         # initialize prediction rates
         self.predictionRates = []
@@ -99,14 +93,11 @@ class NeuralNetwork:
             # update weights/thetas for next iteration
             self.update_thetas(fp)
 
-            # keep track of errors of different data sets
-            if len(self.cvInput) and len(self.cvOutput):
-                self.set_cv_error()
-            self.set_training_error(fp[-1])
-
-            # keep track of how well this network does by using test data
-            if len(self.testInput) and len(self.testOutput):
+            # keep track of how well this network performs
+            if len(self.validationInput) and len(self.validationOutput):
+                self.set_validation_error()
                 self.set_prediction_rate()
+            self.set_training_error(fp[-1])
 
         self.plot()
 
@@ -145,37 +136,36 @@ class NeuralNetwork:
         for k in range(len(self.thetas)-1, -1, -1):
             self.thetas[k] = self.thetas[k] - (ratio * dot(concat_bias(self.bias, a[k]).T, d[k]))
 
-    def set_cv_error(self):
-        m = self.cvInput.shape[0]
-        prediction = self.forward_pass(self.cvInput)[-1]
-        cvError = sum(sum(np.square(prediction - self.cvOutput))) / (2 * m)
-        self.cvErrors.append(cvError)
+    def set_validation_error(self):
+        m = self.validationInput.shape[0]
+        prediction = self.forward_pass(self.validationInput)[-1]
+        validationError = sum(sum(np.square(prediction - self.validationOutput))) / (2 * m)
+        self.validationErrors.append(validationError)
 
     def set_training_error(self, prediction):
         trainError = sum(sum(np.square(prediction - self.output))) / (2 * self.m)
         self.trainErrors.append(trainError)
 
     def set_prediction_rate(self):
-        m = self.testInput.shape[0]
+        m = self.validationInput.shape[0]
         predictionRate = 0
-        prediction = self.forward_pass(self.testInput)[-1]
+        prediction = self.forward_pass(self.validationInput)[-1]
         # convert to binary data
         prediction = get_binary(prediction)
         for index, e in enumerate(prediction):
-            if np.array_equal(e, self.testOutput[index]):
+            if np.array_equal(e, self.validationOutput[index]):
                 predictionRate += 1
         self.predictionRates.append(predictionRate / m)
 
     def plot(self):
         x = np.arange(0, self.trainingIterations, 1)
 
-        #if len(self.trainErrors) and len(self.cvErrors):
         # training error
         plt.figure(1)
         plt.ylabel("error")
         plt.xlabel("iterations")
-        if len(self.cvErrors):
-            plt.plot(x, self.trainErrors, 'b-', x, self.cvErrors, 'r-')
+        if len(self.validationErrors):
+            plt.plot(x, self.trainErrors, 'b-', x, self.validationErrors, 'r-')
         else:
             plt.plot(x, self.trainErrors, 'b-')
 
@@ -193,17 +183,14 @@ if __name__ == '__main__':
     np.set_printoptions(threshold = 1000, precision=4, suppress=True)
     user1 = input("Enter the first Twitter username:\n")
     user2 = input("Enter the second Twitter username:\n")
-    testDataAmount = float(input("Enter amount of test data (0.8 recommended):\n"))
+    trainDataAmount = float(input("Enter amount of training data (0.8 recommended):\n"))
     rounds = int(input("Enter training iterations:\n"))
     learnRate = float(input("Enter learn rate:\n"))
     hiddenLayers = int(input("Enter amount of hidden layers:\n"))
-    data = ds.Dataset(user1, user2, testDataAmount)
-    # test data
-    testInput = data.testSet[:, 1:]
-    testOutput = data.testSet[:, [0]]
-    # cross validation data
-    cvInput = data.cvSet[:, 1:]
-    cvOutput = data.cvSet[:, [0]]
+    data = ds.Dataset(user1, user2, trainDataAmount)
+    # validation data
+    validationInput = data.validationSet[:, 1:]
+    validationOutput = data.validationSet[:, [0]]
     # training data
     trainInput = data.trainSet[:, 1:]
     trainOutput = data.trainSet[:, [0]]
@@ -215,10 +202,8 @@ if __name__ == '__main__':
         1,                          # amount of output neurons
         trainInput,                 # training input data
         trainOutput,                # training output data
-        cvInput,                    # cross validation input data
-        cvOutput,                   # cross validation output data
-        testInput,                  # test input data
-        testOutput                  # test output data
+        validationInput,            # validation input data
+        validationOutput            # validation output data
     )
     nn.train()
     print("The Neural Network has been trained.")
