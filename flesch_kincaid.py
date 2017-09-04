@@ -9,7 +9,6 @@ Compute Flesch Kincaid readability tests
 """
 
 import utils
-from nltk.corpus import cmudict
 
 
 def get_flesch_readability_ease(tokenizedText, pronouncingDict):
@@ -46,22 +45,3 @@ def get_text_with_max_or_min_readability_score(corpus, function, pronouncingDict
                 maxMinScore = score
                 maxMinScoreText = text
     return (maxMinScore, maxMinScoreText)
-
-if __name__ == '__main__':
-    pronouncingDict = cmudict.dict()
-    tweets = utils.get_twitter_corpus()
-    preprocessedTweets = [ utils.preprocess(tweet) for tweet in tweets if len(utils.preprocess(tweet)) ]
-
-    # get text with lowest flesch readability ease score
-    minEase = get_text_with_max_or_min_readability_score(preprocessedTweets, get_flesch_readability_ease, pronouncingDict, False)
-    print(minEase)
-    # get text with lowest flesch grade level score
-    minGrade = get_text_with_max_or_min_readability_score(preprocessedTweets, get_flesch_grade_level, pronouncingDict, False)
-    print(minGrade)
-
-    # get text with highest flesch readability ease score
-    maxEase = get_text_with_max_or_min_readability_score(preprocessedTweets, get_flesch_readability_ease, pronouncingDict, True)
-    print(maxEase)
-    # get text with highest flesch grade level score
-    maxGrade = get_text_with_max_or_min_readability_score(preprocessedTweets, get_flesch_grade_level, pronouncingDict, True)
-    print(maxGrade)

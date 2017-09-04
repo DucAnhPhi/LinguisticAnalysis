@@ -186,10 +186,3 @@ def get_word_syllables_offline(word, pronouncingDict):
 def get_twitter_corpus():
     tweets = twitter_samples.strings('tweets.20150430-223406.json')
     return tweets
-
-if __name__ == '__main__':
-    pronouncingDict = cmudict.dict()
-    get_word_syllables('duc', pronouncingDict)
-    get_word_syllables('interesting', pronouncingDict)
-    get_word_syllables('lolololololol', pronouncingDict)
-    get_word_syllables('supercalifragilisticexpialidocious', pronouncingDict)
