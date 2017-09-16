@@ -1,9 +1,9 @@
-# Linguistic Analysis
+# Linguistical Analysis of Social Media Messages
 
 As part of my Bachelor's thesis I implemented a program which computes
-and displays the textual features of a person's tweets. With the gained
-insights from that program, I trained a Neural Network to classify the
-tweets by their creator.
+and displays textual statistics of a person's Tweets. With the gained
+linguistical insights from that program, I trained an Artificial Neural Network
+to classify the tweets by their creator.
 
 
 - [Installation](#installation)
@@ -98,16 +98,15 @@ $ set TWITTER_ACCESS_SECRET="your-access-secret"
 
 Executables
 
-* [neural_network.py](neural_network.py): Neural network for supervised machine learning
-* [linguistic_analysis.py](linguistic_analysis.py): Compute textual features of tweets
+* [neural_network.py](neural_network.py): Artificial Neural Network for Tweet Classification
+* [linguistic_analysis.py](linguistic_analysis.py): Computation and display of textual statistics of a user's Tweets
 * [setup.py](setup.py): Setup script for downloading all dependencies
 
 Other files
 
-* [utils.py](utils.py): Reusable functions
+* [utils.py](utils.py): Collection of reusable functions
 * [twitter_api_setup.py](twitter_api_setup.py): Setup Twitter client for API calls
-* [flesch_kincaid.py](flesch_kincaid.py): Compute Flesch Kincaid readability tests
-* [dataset.py](dataset.py): Prepare datasets for Neural Network
+* [dataset.py](dataset.py): Prepare datasets for Artificial Neural Network
 
 Unit tests
 
