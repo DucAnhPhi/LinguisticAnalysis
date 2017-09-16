@@ -13,7 +13,6 @@ import copy
 import urllib.request
 from nltk.corpus import stopwords
 from nltk.corpus import twitter_samples
-from nltk.corpus import cmudict
 from nltk.tokenize import TweetTokenizer
 from nltk.tokenize import sent_tokenize
 from assets.contractions import contractions
