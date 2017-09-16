@@ -11,7 +11,7 @@ Unit tests for dataset.py
 import unittest
 import dataset as ds
 import numpy as np
-from flesch_kincaid import get_flesch_grade_level as lvl
+from utils import get_flesch_grade_level as lvl
 from nltk.corpus import cmudict
 
 pronDict = cmudict.dict()

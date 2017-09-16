@@ -14,7 +14,6 @@ from nltk.corpus import cmudict
 from tweepy import Cursor
 from twitter_api_setup import get_twitter_client
 from collections import Counter
-from flesch_kincaid import get_flesch_grade_level
 
 
 def get_max_amount_tweets(user):
@@ -97,7 +96,7 @@ def get_average_flesch_grade_level(tweets):
     pronouncingDict = cmudict.dict()
     level = 0
     for tweet in tweets:
-        level += get_flesch_grade_level(tweet, pronouncingDict)
+        level += utils.get_flesch_grade_level(tweet, pronouncingDict)
     return level / len(tweets)
 
 # inspired from Marco Bonzanini - Mastering Social Media Mining with Python

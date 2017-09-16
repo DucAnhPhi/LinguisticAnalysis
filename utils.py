@@ -222,6 +222,22 @@ def get_word_syllables_offline(word, pronouncingDict):
         sylCount = len(re.findall(r'[aiouy]+e*|e(?!d$|ly).|[td]ed|le$', word))
         return sylCount
 
+def get_flesch_grade_level(tokenizedText, pronouncingDict):
+    words = sum(tokenizedText, [])
+    numberOfWords = len(words)
+    numberOfSentences = len(tokenizedText)
+    numberOfSyllables = 0
+    for word in words:
+        numberOfSyllables = (
+            numberOfSyllables
+            + get_word_syllables_offline(word, pronouncingDict)
+        )
+    return (
+        (0.39 * numberOfWords / numberOfSentences)
+        + (11.8 * numberOfSyllables / numberOfWords)
+        - 15.59
+    )
+
 def get_twitter_corpus():
     tweets = twitter_samples.strings('tweets.20150430-223406.json')
     return tweets

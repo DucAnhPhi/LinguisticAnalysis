@@ -14,7 +14,7 @@ import copy
 from random import shuffle
 from nltk.corpus import cmudict
 import linguistic_analysis as la
-import flesch_kincaid as fk
+from utils import get_flesch_grade_level
 import neural_network as nn
 
 
@@ -86,7 +86,7 @@ def extract_features(tweet, combinedKeywords, pronDict):
     else:
         sentLength = la.get_sentence_length(preprocessed)
         exclMarks = la.get_exclamation_marks(tweet)
-        gradeLvl = fk.get_flesch_grade_level(preprocessed, pronDict)
+        gradeLvl = get_flesch_grade_level(preprocessed, pronDict)
         keyCount = get_keywords_count(preprocessed, combinedKeywords)
 
         # put all features together
