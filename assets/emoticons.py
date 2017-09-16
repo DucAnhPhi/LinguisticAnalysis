@@ -6,8 +6,10 @@ Created on Mon Jul 24 21:02:22 2017
 @author: duc
 """
 
-# a list of emoticons containing letters or numbers the TweetTokenizer does or may not know
-# reason: emoticons without letters or numbers are removed easily without the need of tokenization
+# a list of emoticons containing letters or numbers,
+# which the TweetTokenizer does or may not know
+# reason: emoticons without letters or numbers are removed easily
+# without the need of tokenization
 
 emoticons = [
     ":-3",

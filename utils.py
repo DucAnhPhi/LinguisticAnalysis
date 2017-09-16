@@ -22,7 +22,10 @@ from assets.emoticons import emoticons
 
 def split_contractions(text):
     preprocessedText = text.lower()
-    contractionsPattern = re.compile('({})'.format('|'.join(contractions.keys())), flags=re.IGNORECASE|re.DOTALL)
+    contractionsPattern = re.compile(
+        '({})'.format('|'.join(contractions.keys())),
+         flags=re.IGNORECASE|re.DOTALL
+    )
 
     def split_match(contraction):
         match = contraction.group(0)
@@ -50,7 +53,8 @@ def preprocess(tweet):
     # remove some emoticons the TweetTokenizer does not know
     preprocessed = remove_emoticons(preprocessed)
 
-    # split contractions like "he's" -> "he s", using imported contractions dictionary
+    # split contractions like "he's" -> "he s",
+    # by using imported contractions dictionary
     preprocessed = split_contractions(preprocessed)
 
     # split compounds like "next-level" -> "next level"
@@ -71,7 +75,15 @@ def preprocess(tweet):
 BOOLEAN functions
 """
 def is_not_link(string):
-    linkPattern = re.compile(r"(http(s)?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
+    linkPattern = re.compile(
+        r'(http(s)?:\/\/)?'
+        r'(www\.)?'
+        r'[-a-zA-Z0-9@:%._\+~#=]{1,256}'
+        r'\.'
+        r'[a-z]{2,6}'
+        r'\b'
+        r'([-a-zA-Z0-9@:%_\+.~#?&//=]*)'
+    )
     if linkPattern.match(string):
         return False
     else:
@@ -91,7 +103,7 @@ def is_not_emoticon(string):
      return string.lower() not in emoticons
 
 def is_retweet(text):
-    rtPattern = re.compile(r"^rt @", flags=re.IGNORECASE)
+    rtPattern = re.compile(r'^rt @', flags=re.IGNORECASE)
     if rtPattern.match(text):
         return True
     else:
@@ -106,13 +118,19 @@ def remove_retweets(tweets):
 
 def remove_links(text):
     tokenizedText = tokenize(text)
-    filtered = [ [ token for token in sentence if is_not_link(token) ] for sentence in tokenizedText ]
+    filtered = [
+        [ token for token in sentence if is_not_link(token) ]
+        for sentence in tokenizedText
+    ]
     return " ".join(sum(filtered, []))
 
 def remove_special_characters(text):
-    # remove special characters without interfering with other normalization methods
+    # remove special characters
+    # without interfering with other normalization methods
     tokenizedText = tokenize(text)
-    alphabetAndDigits = [chr(i) for i in range(97, 123)] + [str(i) for i in range(0, 10)]
+    alphabetAndDigits = [
+        chr(i) for i in range(97, 123)] + [str(i) for i in range(0, 10)
+    ]
 
     def clean(string):
         cleanedString = ''
@@ -121,7 +139,16 @@ def remove_special_characters(text):
                 cleanedString += character
         return cleanedString
 
-    filtered = [ [ clean(token) if all([is_not_link(token), is_not_contraction(token), is_not_compound(token), is_not_emoticon(token)]) else token for token in sentence if len(clean(token)) ] for sentence in tokenizedText ]
+    filtered = [
+        [
+            clean(token) if all([
+                is_not_link(token), is_not_contraction(token),
+                is_not_compound(token), is_not_emoticon(token)
+            ])
+            else token for token in sentence if len(clean(token))
+        ]
+        for sentence in tokenizedText
+    ]
     return filtered
 
 def remove_emoticons(text):
@@ -135,7 +162,10 @@ def remove_emoticons(text):
 
 def remove_stopwords(preprocessedText):
     stopwordList = stopwords.words('english')
-    filtered = [ [ token for token in sentence if token not in stopwordList ] for sentence in preprocessedText ]
+    filtered = [
+        [ token for token in sentence if token not in stopwordList ]
+        for sentence in preprocessedText
+    ]
     return filtered
 
 def remove_empty_sentences(tokenizedText):
@@ -148,13 +178,17 @@ GETTER functions
 def get_word_difficulty(word):
     url = 'http://www.dictionary.com/browse/' + word
     request = urllib.request.urlopen(url)
-    difficulty = re.search('(?<=data-difficulty=")[0-9]+', request.read().decode('utf-8'))
+    difficulty = re.search(
+        '(?<=data-difficulty=")[0-9]+', request.read().decode('utf-8')
+    )
     if difficulty:
         return difficulty[0]
 
 def get_word_syllables(word, pronouncingDict):
-    # returns a list of transcriptions for a word - a word may have alternative pronunciations
-    # eg. 'orange' -> [['AO1', 'R', 'AH0', 'N', 'JH'], ['A01', 'R', 'IH0', 'N', 'JH']]
+    # returns a list of transcriptions for a word
+    # (a word may have alternative pronunciations)
+    # eg. 'orange':
+    # -> [['AO1', 'R', 'AH0', 'N', 'JH'], ['A01', 'R', 'IH0', 'N', 'JH']]
     # vowels are marked with numbers from 0-2
     # by counting the vowels we can get the number of syllables
     try:
@@ -168,7 +202,9 @@ def get_word_syllables(word, pronouncingDict):
         request = urllib.request.urlopen(url)
         response = request.read().decode('utf-8')
         # use regex to match desired value
-        sylCount = int(re.search("(?<=<b style='color: #008000'>)[0-9]+", response)[0])
+        sylCount = int(
+            re.search("(?<=<b style='color: #008000'>)[0-9]+", response)[0]
+        )
         return sylCount;
 
 def get_word_syllables_offline(word, pronouncingDict):
@@ -179,7 +215,10 @@ def get_word_syllables_offline(word, pronouncingDict):
         sylCount = len([ syl for syl in pronList if syl[-1].isdecimal() ])
         return sylCount
     except KeyError:
-        # regex from: https://codegolf.stackexchange.com/questions/47322/how-to-count-the-syllables-in-a-word
+        # regex from:
+        #     https://codegolf.stackexchange.com
+        #     /questions/47322/how-to-count-the-syllables-in-a-word
+        # access on 16.09.2017, 10:17
         sylCount = len(re.findall(r'[aiouy]+e*|e(?!d$|ly).|[td]ed|le$', word))
         return sylCount
 

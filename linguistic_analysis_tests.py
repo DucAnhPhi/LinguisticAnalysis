@@ -11,10 +11,16 @@ Unit test for linguistic_analysis.py
 import unittest
 import linguistic_analysis as la
 
-tweets = ["Is this not a question?! Interactive introduction reference information", "Sure! Why not?"]
+tweets = [
+    "Is this not a question?! Interactive introduction reference information",
+    "Sure! Why not?"
+]
 norm = [
-        [["is", "this", "not", "a", "question"], ["interactive", "introduction", "reference", "information"]],
-        [["sure", "why", "not"]]
+    [
+        ["is", "this", "not", "a", "question"],
+        ["interactive", "introduction", "reference", "information"]
+    ],
+    [["sure", "why", "not"]]
 ]
 
 class LinguisticAnalysisTests(unittest.TestCase):

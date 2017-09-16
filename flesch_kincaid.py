@@ -17,8 +17,15 @@ def get_flesch_readability_ease(tokenizedText, pronouncingDict):
     numberOfSentences = len(tokenizedText)
     numberOfSyllables = 0
     for word in words:
-        numberOfSyllables += utils.get_word_syllables_offline(word, pronouncingDict)
-    return 206.835 - (1.015 * numberOfWords / numberOfSentences) - (84.6 * numberOfSyllables / numberOfWords)
+        numberOfSyllables = (
+            numberOfSyllables
+            + utils.get_word_syllables_offline(word, pronouncingDict)
+        )
+    return (
+        206.835
+        - (1.015 * numberOfWords / numberOfSentences)
+        - (84.6 * numberOfSyllables / numberOfWords)
+    )
 
 def get_flesch_grade_level(tokenizedText, pronouncingDict):
     words = sum(tokenizedText, [])
@@ -26,10 +33,19 @@ def get_flesch_grade_level(tokenizedText, pronouncingDict):
     numberOfSentences = len(tokenizedText)
     numberOfSyllables = 0
     for word in words:
-        numberOfSyllables += utils.get_word_syllables_offline(word, pronouncingDict)
-    return (0.39 * numberOfWords / numberOfSentences) + (11.8 * numberOfSyllables / numberOfWords) - 15.59
+        numberOfSyllables = (
+            numberOfSyllables
+            + utils.get_word_syllables_offline(word, pronouncingDict)
+        )
+    return (
+        (0.39 * numberOfWords / numberOfSentences)
+        + (11.8 * numberOfSyllables / numberOfWords)
+        - 15.59
+    )
 
-def get_text_with_max_or_min_readability_score(corpus, function, pronouncingDict, getMax):
+def get_text_with_max_or_min_readability_score(
+    corpus, function, pronouncingDict, getMax
+):
     maxMinScore = 'init'
     maxMinScoreText = ''
     for text in corpus:

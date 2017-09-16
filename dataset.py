@@ -22,7 +22,9 @@ def normalize(data):
     normalized = copy.deepcopy(data)
     # since there are no negative values we can just divide each column
     # elementwise by its maximum, in order to get values between 0 and 1
-    # from https://stackoverflow.com/questions/29661574/normalize-numpy-array-columns-in-python
+    # from:
+    #     https://stackoverflow.com/questions/29661574
+    #     /normalize-numpy-array-columns-in-python
     # access on 27.08.2017 23:27
     normalized = normalized / normalized.max(axis = 0)
     return normalized
@@ -40,8 +42,14 @@ def get_positive_negative_amount(data):
 
 def get_combined_keywords(tweets1, tweets2):
         # preprocess tweets
-        preprocTweets1 = [ ut.preprocess(tweet) for tweet in tweets1 if len(ut.preprocess(tweet)) ]
-        preprocTweets2 = [ ut.preprocess(tweet) for tweet in tweets2 if len(ut.preprocess(tweet)) ]
+        preprocTweets1 = [
+            ut.preprocess(tweet) for tweet in tweets1
+            if len(ut.preprocess(tweet))
+        ]
+        preprocTweets2 = [
+            ut.preprocess(tweet) for tweet in tweets2
+            if len(ut.preprocess(tweet))
+        ]
 
         # get combined list of top 25 most used keywords
         keywords1 = la.get_most_frequent_keywords(preprocTweets1)
@@ -149,14 +157,20 @@ class Dataset:
         # extract features
         self.combinedKeywords = get_combined_keywords(tweets1, tweets2)
 
-        data1 = np.array(
-            [extract_features(tweet, self.combinedKeywords, self.pronDict) for tweet in tweets1
-             if len(extract_features(tweet, self.combinedKeywords, self.pronDict))]
-        )
-        data2 = np.array(
-            [extract_features(tweet, self.combinedKeywords, self.pronDict) for tweet in tweets2
-             if len(extract_features(tweet, self.combinedKeywords, self.pronDict))]
-        )
+        data1 = np.array([
+            extract_features(tweet, self.combinedKeywords, self.pronDict)
+            for tweet in tweets1
+            if len(
+                extract_features(tweet, self.combinedKeywords, self.pronDict)
+            )
+        ])
+        data2 = np.array([
+            extract_features(tweet, self.combinedKeywords, self.pronDict)
+            for tweet in tweets2
+            if len(
+                extract_features(tweet, self.combinedKeywords, self.pronDict)
+            )
+        ])
 
         # label data
         data1 = nn.concat_bias(1, data1)

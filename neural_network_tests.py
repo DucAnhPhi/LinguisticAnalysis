@@ -20,7 +20,9 @@ class NeuralNetworkTests(unittest.TestCase):
         net = nn.NeuralNetwork(6000,1,2,1,1, input, output, [], [])
         net.train()
         decimal = 1
-        np.testing.assert_array_almost_equal(net.forward_pass(input)[-1], output, decimal)
+        np.testing.assert_array_almost_equal(
+            net.forward_pass(input)[-1], output, decimal
+        )
 
     def test_to_binary(self):
         m = np.array([[0.9, 0.5, 0.6],[0.003, 0.4, 0.59 ],[0.8, 0.5, 0.49]])

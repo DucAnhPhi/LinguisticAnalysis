@@ -6,7 +6,10 @@ Created on Mon Jul  3 23:33:39 2017
 @author: duc
 """
 
-#modified from https://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python
+# modified from:
+# https://stackoverflow.com/questions
+# /19790188/expanding-english-language-contractions-in-python
+# access on 15.09.2017, 10:32
 contractions = { 
 "ain't": "am not",
 "aren't": "are not",

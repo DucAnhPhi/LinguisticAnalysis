@@ -42,8 +42,9 @@ class NeuralNetwork:
     bias = 1
 
     def __init__(
-            self, trainingIterations, learnRate, inputNeurons, hiddenLayers,
-            outputNeurons, inputData, outputData, validationInputData, validationOutputData
+        self, trainingIterations, learnRate, inputNeurons,
+        hiddenLayers, outputNeurons, inputData, outputData,
+        validationInputData, validationOutputData
     ):
 
         self.trainingIterations = trainingIterations
@@ -81,7 +82,9 @@ class NeuralNetwork:
         # initialize weights randomly from -0.5 to 0.5
         self.thetas = []
         for i in range(0, hiddenLayers):
-            self.thetas.append(np.random.rand(self.inputColumns + 1, inputNeurons)-0.5)
+            self.thetas.append(
+                np.random.rand(self.inputColumns + 1,inputNeurons)-0.5
+            )
         self.thetas.append(np.random.rand(inputNeurons + 1, outputNeurons)-0.5)
 
     def train(self):
@@ -108,7 +111,9 @@ class NeuralNetwork:
         a.append(inputData)
         for i in range(0, len(self.thetas)):
             # activation of a layer
-            a.append(sigmoid(dot(concat_bias(self.bias, a[i]), self.thetas[i])))
+            a.append(
+                sigmoid(dot(concat_bias(self.bias, a[i]), self.thetas[i]))
+            )
 
         # return activations
         return a
@@ -134,16 +139,23 @@ class NeuralNetwork:
 
         # compute change and update weights
         for k in range(len(self.thetas)-1, -1, -1):
-            self.thetas[k] = self.thetas[k] - (ratio * dot(concat_bias(self.bias, a[k]).T, d[k]))
+            self.thetas[k] = (
+                self.thetas[k]
+                - (ratio * dot(concat_bias(self.bias, a[k]).T, d[k]))
+            )
 
     def set_validation_error(self):
         m = self.validationInput.shape[0]
         prediction = self.forward_pass(self.validationInput)[-1]
-        validationError = sum(sum(np.square(prediction - self.validationOutput))) / (2 * m)
+        validationError = (
+            sum(sum(np.square(prediction - self.validationOutput))) / (2 * m)
+        )
         self.validationErrors.append(validationError)
 
     def set_training_error(self, prediction):
-        trainError = sum(sum(np.square(prediction - self.output))) / (2 * self.m)
+        trainError = (
+            sum(sum(np.square(prediction - self.output))) / (2 * self.m)
+        )
         self.trainErrors.append(trainError)
 
     def set_prediction_rate(self):
@@ -183,7 +195,9 @@ if __name__ == '__main__':
     np.set_printoptions(threshold = 1000, precision=4, suppress=True)
     user1 = input("Enter the first Twitter username:\n")
     user2 = input("Enter the second Twitter username:\n")
-    trainDataAmount = float(input("Enter amount of training data (0.8 recommended):\n"))
+    trainDataAmount = (
+        float(input("Enter amount of training data (0.8 recommended):\n"))
+    )
     rounds = int(input("Enter training iterations:\n"))
     learnRate = float(input("Enter learn rate:\n"))
     hiddenLayers = int(input("Enter amount of hidden layers:\n"))
@@ -210,7 +224,9 @@ if __name__ == '__main__':
     while True:
         tweet = input("Enter a tweet to get a prediction:\n")
         pronDict = cmudict.dict()
-        featureVector = ds.extract_features(tweet, data.combinedKeywords, pronDict)
+        featureVector = (
+            ds.extract_features(tweet, data.combinedKeywords, pronDict)
+        )
         if len(featureVector) == 0:
             print("Cannot get a prediction for given tweet.")
         else:

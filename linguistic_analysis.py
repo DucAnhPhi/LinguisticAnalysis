@@ -47,7 +47,7 @@ def get_average_question_marks(tweets):
         count += len(questionMark.findall(tweet))
     return count / len(tweets)
 
-#------ functions below require preprocessed and tokenized text -----------------
+#------ functions below require preprocessed and tokenized text ---------------
 def get_average_word_characters(tweets):
     charCount = 0
     words = 0
@@ -103,7 +103,9 @@ def get_average_flesch_grade_level(tweets):
 # inspired from Marco Bonzanini - Mastering Social Media Mining with Python
 # p. 74
 def get_most_frequent_keywords(tweets):
-    tweetsWithoutStopwords = [utils.remove_stopwords(tweet) for tweet in tweets]
+    tweetsWithoutStopwords = (
+        [utils.remove_stopwords(tweet) for tweet in tweets]
+    )
     counter = Counter()
     # get rid of sentence structure after tokenization
     newTweets = [ sum(tweet, []) for tweet in tweetsWithoutStopwords ]
@@ -113,14 +115,32 @@ def get_most_frequent_keywords(tweets):
 #------------------------------------------------------------------------------
 def get_linguistic_analysis(user):
     tweets = utils.remove_retweets(get_max_amount_tweets(user))
-    norm = [ utils.preprocess(tweet) for tweet in tweets if len(utils.preprocess(tweet)) if not utils.is_retweet(tweet) ]
+    norm = [
+        utils.preprocess(tweet)
+        for tweet in tweets if len(utils.preprocess(tweet))
+        if not utils.is_retweet(tweet)
+    ]
     print("\nLinguistic Analysis of ", user, "'s tweets\n")
-    print("Average word length: ", get_average_word_characters(norm), " characters")
+    print(
+        "Average word length: ",
+        get_average_word_characters(norm),
+        " characters"
+    )
     print("Average syllables per word: ", get_average_word_syllables(norm))
-    print("Average sentence length: ", get_average_sentence_length(norm), " words")
+    print(
+        "Average sentence length: ",
+        get_average_sentence_length(norm),
+        " words"
+    )
     print("Average tweet length: ", get_average_tweet_length(norm), " words")
-    print("Average question marks per tweet: ", get_average_question_marks(tweets))
-    print("Average exclamation marks per tweet: ", get_average_exclamation_marks(tweets))
+    print(
+        "Average question marks per tweet: ",
+        get_average_question_marks(tweets)
+    )
+    print(
+        "Average exclamation marks per tweet: ",
+        get_average_exclamation_marks(tweets)
+    )
     print("Average flesch grade level: ", get_average_flesch_grade_level(norm))
     print("\nMost frequent 25 keywords:")
     for tag,count in get_most_frequent_keywords(norm):
@@ -128,5 +148,7 @@ def get_linguistic_analysis(user):
 
 
 if __name__ == '__main__':
-    user = input("Enter the Twitter username of the person you want to analyse:\n")
+    user = input(
+        "Enter the Twitter username of the person you want to analyse:\n"
+    )
     get_linguistic_analysis(user)
