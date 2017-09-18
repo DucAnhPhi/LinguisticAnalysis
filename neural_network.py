@@ -57,8 +57,6 @@ class NeuralNetwork:
 
         # initialize training data
         self.input = inputData
-        # input nodes
-        self.inputColumns = inputData.shape[1]
         # amount of input data
         self.m = inputData.shape[0]
         self.output = outputData
@@ -83,7 +81,7 @@ class NeuralNetwork:
         self.thetas = []
         for i in range(0, hiddenLayers):
             self.thetas.append(
-                np.random.rand(self.inputColumns + 1,inputNeurons)-0.5
+                np.random.rand(inputNeurons + 1,inputNeurons)-0.5
             )
         self.thetas.append(np.random.rand(inputNeurons + 1, outputNeurons)-0.5)
 
