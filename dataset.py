@@ -144,8 +144,8 @@ class Dataset:
         self.combinedKeywords = []
         self.pronDict = cmudict.dict()
 
-        data = self.get_prepared_tweet_data()
-        dividedData = divide_data_into_sets(data, trainDataAmount)
+        self.data = self.get_prepared_tweet_data()
+        dividedData = divide_data_into_sets(self.data, trainDataAmount)
         self.validationSet = dividedData[0]
         self.trainSet = dividedData[1]
 
@@ -183,3 +183,17 @@ class Dataset:
         data = normalize(data)
         # return numpy array
         return data
+
+    def normalize_input_tweet(self, tweet):
+        # input tweet has to be normalized with the data,
+        # the model was trained with
+
+        # concatenate vertically
+        data = np.r_[self.data[:, 1:], np.array([tweet])]
+
+        # get maximum values for each feature
+        maxValues = data.max(axis = 0)
+
+        normalized = tweet / maxValues
+
+        return normalized

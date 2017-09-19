@@ -225,11 +225,11 @@ if __name__ == '__main__':
         featureVector = (
             ds.extract_features(tweet, data.combinedKeywords, pronDict)
         )
+        featureVector = data.normalize_input_tweet(featureVector)
         if len(featureVector) == 0:
             print("Cannot get a prediction for given tweet.")
         else:
             prediction = nn.forward_pass(np.array([featureVector]))[-1]
-            print(prediction)
             if prediction > 0.5:
                 print("This tweet is probably written by ", user1)
             else:
