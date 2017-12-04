@@ -66,8 +66,11 @@ class DatasetTests(unittest.TestCase):
         dataset = ds.Dataset("realDonaldTrump", "HillaryClinton", 0.8)
         # should have 50% positive and 50% negative examples
         trainSet = dataset.trainSet
-        count = ds.get_positive_negative_amount(trainSet)
-        self.assertEqual(count[0], count[1])
+        validationSet = dataset.validationSet
+        tCount = ds.get_positive_negative_amount(trainSet)
+        vCount = ds.get_positive_negative_amount(validationSet)
+        self.assertEqual(tCount[0], tCount[1])
+        self.assertEqual(vCount[0], vCount[1])
 
 
 if __name__ == '__main__':
