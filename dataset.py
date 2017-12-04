@@ -96,7 +96,33 @@ def extract_features(tweet, combinedKeywords, pronDict):
         # return array
         return features
 
-def divide_data_into_sets(data, trainDataAmount):
+def balance_data_ratio(data):
+    # make sure data has equal amounts of its data classes
+
+    # count positive and negative examples
+    pnCounts = get_positive_negative_amount(data)
+    pCount = pnCounts[0]
+    nCount = pnCounts[1]
+
+    maxCount = min(pCount, nCount)
+    pCount = maxCount
+    nCount = maxCount
+
+    origData = copy.copy(data)
+    balancedData = []
+
+    for e in origData:
+        label = e[0]
+        if label == 1 and pCount != 0:
+            pCount -= 1
+            balancedData.append(e)
+        elif label == 0 and nCount != 0:
+            nCount -= 1
+            balancedData.append(e)
+
+    return balancedData
+
+def get_validation_and_train_data(data, trainDataAmount):
     # count positive and negative examples
     pnCounts = get_positive_negative_amount(data)
     pCount = pnCounts[0]
@@ -125,13 +151,16 @@ def divide_data_into_sets(data, trainDataAmount):
             trainingSet.append(e)
             validationSet.remove(e)
 
+    # make sure validation set contains equal amounts
+    # of positive and negative examples
+    validationSet = balance_data_ratio(validationSet)
+
     # shuffle training and test set
     shuffle(trainingSet)
     shuffle(validationSet)
 
     # return data sets as numpy arrays
     return (np.array(validationSet), np.array(trainingSet))
-
 
 class Dataset:
 
@@ -145,14 +174,16 @@ class Dataset:
         self.pronDict = cmudict.dict()
 
         self.data = self.get_prepared_tweet_data()
-        dividedData = divide_data_into_sets(self.data, trainDataAmount)
+        dividedData = get_validation_and_train_data(self.data, trainDataAmount)
         self.validationSet = dividedData[0]
         self.trainSet = dividedData[1]
 
     def get_prepared_tweet_data(self):
         # get tweets and remove retweets
-        tweets1 = ut.remove_retweets(la.get_max_amount_tweets(self.user1))
-        tweets2 = ut.remove_retweets(la.get_max_amount_tweets(self.user2))
+        # tweets1 = ut.remove_retweets(la.get_max_amount_tweets(self.user1))
+        # tweets2 = ut.remove_retweets(la.get_max_amount_tweets(self.user2))
+        tweets1 = ut.remove_retweets(la.get_tweets_from_file(self.user1))
+        tweets2 = ut.remove_retweets(la.get_tweets_from_file(self.user2))
 
         # extract features
         self.combinedKeywords = get_combined_keywords(tweets1, tweets2)
