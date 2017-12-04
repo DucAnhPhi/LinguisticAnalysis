@@ -71,8 +71,9 @@ class NeuralNetwork:
         # initialize validation errors
         self.validationErrors = []
 
-        # initialize prediction rates
-        self.predictionRates = []
+        # initialize prediction rates for each class
+        self.predictionRates1 = []
+        self.predictionRates2 = []
 
         # seed random generator
         #np.random.seed(7)
@@ -158,14 +159,21 @@ class NeuralNetwork:
 
     def set_prediction_rate(self):
         m = self.validationInput.shape[0]
-        predictionRate = 0
+        predictionRate1 = 0
+        predictionRate2 = 0
         prediction = self.forward_pass(self.validationInput)[-1]
         # convert to binary data
         prediction = get_binary(prediction)
         for index, e in enumerate(prediction):
             if np.array_equal(e, self.validationOutput[index]):
-                predictionRate += 1
-        self.predictionRates.append(predictionRate / m)
+                # prediction for class 1
+                if e == 1:
+                    predictionRate1 += 1
+                # prediction for class 2
+                elif e == 0:
+                    predictionRate2 += 1
+        self.predictionRates1.append(predictionRate1 / (m/2))
+        self.predictionRates2.append(predictionRate2 / (m/2))
 
     def plot(self):
         x = np.arange(0, self.trainingIterations, 1)
@@ -176,15 +184,18 @@ class NeuralNetwork:
         plt.xlabel("iterations")
         if len(self.validationErrors):
             plt.plot(x, self.trainErrors, 'b-', x, self.validationErrors, 'r-')
+            plt.legend(('Training errors', 'Validation errors'), loc='upper left')
         else:
             plt.plot(x, self.trainErrors, 'b-')
 
-        if len(self.predictionRates):
+        if len(self.predictionRates1) and len(self.predictionRates2):
             # prediction rate
             plt.figure(2)
             plt.ylabel("prediction rate")
             plt.xlabel("iterations")
-            plt.plot(x, self.predictionRates, 'g-')
+            plt.plot(x, self.predictionRates1, 'g-', x, self.predictionRates2, 'c-')
+            plt.legend(('class 1', 'class 2'), loc='upper left')
+            plt.title('Prediction rates')
 
         plt.show()
 
@@ -221,16 +232,18 @@ if __name__ == '__main__':
     print("The Neural Network has been trained.")
     while True:
         tweet = input("Enter a tweet to get a prediction:\n")
-        pronDict = cmudict.dict()
-        featureVector = (
-            ds.extract_features(tweet, data.combinedKeywords, pronDict)
-        )
-        featureVector = data.normalize_input_tweet(featureVector)
-        if len(featureVector) == 0:
-            print("Cannot get a prediction for given tweet.")
-        else:
-            prediction = nn.forward_pass(np.array([featureVector]))[-1]
-            if prediction > 0.5:
-                print("This tweet is probably written by ", user1)
+        if len(tweet):
+            pronDict = cmudict.dict()
+            featureVector = (
+                ds.extract_features(tweet, data.combinedKeywords, pronDict)
+            )
+            featureVector = data.normalize_input_tweet(featureVector)
+            if len(featureVector) == 0:
+                print("Cannot get a prediction for given tweet.")
             else:
-                print("This tweet is probably written by ", user2)
+                prediction = nn.forward_pass(np.array([featureVector]))[-1]
+                print(prediction)
+                if prediction > 0.5:
+                    print("This tweet is probably written by ", user1)
+                else:
+                    print("This tweet is probably written by ", user2)
