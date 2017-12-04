@@ -10,6 +10,7 @@ Linguistic analysis of tweets
 
 import utils
 import re
+import json
 from nltk.corpus import cmudict
 from tweepy import Cursor
 from twitter_api_setup import get_twitter_client
@@ -21,12 +22,22 @@ def get_max_amount_tweets(user):
     api = get_twitter_client()
     print("\nfetch", user,"'s tweets")
 
-    # request to get most recent 3200 tweets
-    for tweet in Cursor(api.user_timeline, screen_name=user).items(3200):
-        maxTweets.append(tweet.text)
+    # request to get most recent 3200 tweets and write to a file
+    with open(user + '_tweets.json', 'w') as f:
+        for tweet in Cursor(api.user_timeline, screen_name=user, tweet_mode="extended").items(3200):
+            maxTweets.append(tweet.full_text)
+        json.dump(maxTweets, f)
 
     print("done fetching", len(maxTweets),"tweets")
     return maxTweets
+
+def get_tweets_from_file(user):
+    tweets = []
+    with open(user + '_tweets.json', 'r') as f:
+        print('read tweets from file' + user + '_tweets.json ...')
+        tweets = json.load(f)
+    print('finish reading')
+    return tweets
 
 def get_average_exclamation_marks(tweets):
     count = 0
@@ -112,8 +123,13 @@ def get_most_frequent_keywords(tweets):
         counter.update(tweet)
     return counter.most_common(25)
 #------------------------------------------------------------------------------
-def get_linguistic_analysis(user):
-    tweets = utils.remove_retweets(get_max_amount_tweets(user))
+def get_linguistic_analysis(user, fromFile):
+    tweets = []
+    if fromFile:
+        tweets = get_tweets_from_file(user)
+    else:
+        tweets = get_max_amount_tweets(user)
+    tweets = utils.remove_retweets(tweets)
     norm = [
         utils.preprocess(tweet)
         for tweet in tweets if len(utils.preprocess(tweet))
@@ -147,7 +163,8 @@ def get_linguistic_analysis(user):
 
 
 if __name__ == '__main__':
+    fromFile = True
     user = input(
         "Enter the Twitter username of the person you want to analyse:\n"
     )
-    get_linguistic_analysis(user)
+    get_linguistic_analysis(user, fromFile)
