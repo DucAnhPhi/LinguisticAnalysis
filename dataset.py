@@ -88,11 +88,13 @@ def extract_features(tweet, combinedKeywords, pronDict):
         exclMarks = la.get_exclamation_marks(tweet)
         gradeLvl = get_flesch_grade_level(preprocessed, pronDict)
         keyCount = get_keywords_count(preprocessed, combinedKeywords)
+        # ensure same order everytime
+        keys = sorted(list(keyCount.keys()))
 
         # put all features together
         features = [ sentLength, exclMarks, gradeLvl ]
-        for key in keyCount:
-            features.append(keyCount[key])
+        for key in keys:
+            features.append(keyCount.get(key))
         # return array
         return features
 
