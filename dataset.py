@@ -155,7 +155,8 @@ def get_validation_and_train_data(data, trainDataAmount):
 
     # make sure validation set contains equal amounts
     # of positive and negative examples
-    validationSet = balance_data_ratio(validationSet)
+    if len(validationSet):
+        validationSet = balance_data_ratio(validationSet)
 
     # shuffle training and test set
     shuffle(trainingSet)

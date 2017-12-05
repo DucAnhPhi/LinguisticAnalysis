@@ -212,8 +212,11 @@ if __name__ == '__main__':
     hiddenLayers = int(input("Enter amount of hidden layers:\n"))
     data = ds.Dataset(user1, user2, trainDataAmount)
     # validation data
-    validationInput = data.validationSet[:, 1:]
-    validationOutput = data.validationSet[:, [0]]
+    validationInput = []
+    validationOutput = []
+    if len(data.validationSet):
+        validationInput = data.validationSet[:, 1:]
+        validationOutput = data.validationSet[:, [0]]
     # training data
     trainInput = data.trainSet[:, 1:]
     trainOutput = data.trainSet[:, [0]]
