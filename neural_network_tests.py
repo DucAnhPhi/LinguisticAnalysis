@@ -17,7 +17,7 @@ class NeuralNetworkTests(unittest.TestCase):
     def test_xor(self):
         input = np.array([[0,0],[1,0],[0,1],[1,1]])
         output = np.array([[0.],[1.],[1.],[0.]])
-        net = nn.NeuralNetwork(6000,1,2,1,1, input, output, [], [])
+        net = nn.NeuralNetwork(10000,1,2,1,1, input, output, [], [])
         net.train()
         decimal = 1
         np.testing.assert_array_almost_equal(
