@@ -34,7 +34,7 @@ def get_max_amount_tweets(user):
 def get_tweets_from_file(user):
     tweets = []
     with open(user + '_tweets.json', 'r') as f:
-        print('read tweets from file' + user + '_tweets.json ...')
+        print('read tweets from file ' + user + '_tweets.json ...')
         tweets = json.load(f)
     print('finish reading')
     return tweets
