@@ -176,7 +176,9 @@ class Dataset:
         self.combinedKeywords = []
         self.pronDict = cmudict.dict()
 
-        self.data = self.get_prepared_tweet_data()
+        self.denormData = self.get_prepared_tweet_data()
+        self.data = normalize(self.denormData)
+
         dividedData = get_validation_and_train_data(self.data, trainDataAmount)
         self.validationSet = dividedData[0]
         self.trainSet = dividedData[1]
@@ -213,8 +215,6 @@ class Dataset:
         # concatenate vertically
         data = np.r_[data1, data2]
 
-        # normalize all the data
-        data = normalize(data)
         # return numpy array
         return data
 
@@ -223,7 +223,7 @@ class Dataset:
         # the model was trained with
 
         # concatenate vertically
-        data = np.r_[self.data[:, 1:], np.array([tweet])]
+        data = np.r_[self.denormData[:, 1:], np.array([tweet])]
 
         # get maximum values for each feature
         maxValues = data.max(axis = 0)
